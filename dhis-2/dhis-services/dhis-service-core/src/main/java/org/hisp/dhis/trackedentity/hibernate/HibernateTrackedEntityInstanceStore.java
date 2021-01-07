@@ -193,14 +193,14 @@ public class HibernateTrackedEntityInstanceStore
 
     private String buildTrackedEntityInstanceCountHql( TrackedEntityInstanceQueryParams params )
     {
+        String orderQuery = getOrderClause( params );
         return buildTrackedEntityInstanceHql( params, false )
             .replaceFirst( SELECT_TEI, "select count(distinct tei) from" )
             .replaceFirst( "inner join fetch tei.programInstances", "inner join tei.programInstances" )
             .replaceFirst( "inner join fetch pi.programStageInstances", "inner join pi.programStageInstances" )
             .replaceFirst( "inner join fetch psi.assignedUser", "inner join psi.assignedUser" )
             .replaceFirst( "inner join fetch tei.programOwners", "inner join tei.programOwners" )
-            .replaceFirst( "order by case when pi.status = 'ACTIVE' then 1 when pi.status = 'COMPLETED' then 2 else 3 end asc, tei.lastUpdated desc ", "" )
-            .replaceFirst( "order by tei.lastUpdated desc ", "" );
+            .replaceFirst( orderQuery, " " );
     }
 
     private String withProgram( TrackedEntityInstanceQueryParams params, SqlHelper hlp )
@@ -304,6 +304,7 @@ public class HibernateTrackedEntityInstanceStore
                 }
             }
         }
+
         return hql;
     }
 
@@ -316,7 +317,20 @@ public class HibernateTrackedEntityInstanceStore
         //Used for switching between registration org unit or ownership org unit. Default source is registration ou.
         String teiOuSource = params.hasProgram() ? "po.organisationUnit" : "tei.organisationUnit";
 
+        if ( params.getOrders() != null && !params.getOrders().isEmpty() )
+        {
+            hql += " left join tei.trackedEntityAttributeValues teav2 " +
+                "left join teav2.attribute as attr2 ";
+        }
+
         hql += withProgram( params, hlp );
+
+        if ( params.getOrders() != null && !params.getOrders().isEmpty() )
+        {
+            List<String> orderParams = getOrderParams( params );
+
+            hql += hlp.whereAnd() + " attr2.uid='" + orderParams.get( 0 ) + "'  ";
+        }
 
         // If sync job, fetch only TEAVs that are supposed to be synchronized
 
@@ -373,9 +387,7 @@ public class HibernateTrackedEntityInstanceStore
 
         hql += addWhereConditionally( hlp, !params.isIncludeDeleted(), () -> " tei.deleted is false " );
 
-        hql += addConditionally( params.hasProgram(),
-            "order by case when pi.status = 'ACTIVE' then 1 when pi.status = 'COMPLETED' then 2 else 3 end asc, tei.lastUpdated desc",
-            "order by tei.lastUpdated desc" );
+        hql += getOrderClause( params );
 
         return hql;
     }
@@ -421,7 +433,7 @@ public class HibernateTrackedEntityInstanceStore
         // Order clause
         // ---------------------------------------------------------------------
 
-        sql += getOrderClause( params );
+        sql += getGridOrderClause( params );
 
         // ---------------------------------------------------------------------
         // Paging clause
@@ -665,6 +677,59 @@ public class HibernateTrackedEntityInstanceStore
     }
 
     private String getOrderClause( TrackedEntityInstanceQueryParams params )
+    {
+        String orderQuery = "order by tei.lastUpdated desc ";
+
+        if ( params.getOrders() != null && !params.getOrders().isEmpty() )
+        {
+            ArrayList<String> orderFields = new ArrayList<>();
+
+            for ( String order : params.getOrders() )
+            {
+                String[] prop = order.split( ":" );
+
+                if ( prop.length == 2 && (prop[1].equals( "desc" ) || prop[1].equals( "asc" )) )
+                {
+                    orderFields.add( "teav2.plainValue " + prop[1] );
+                }
+            }
+
+            if ( !orderFields.isEmpty() )
+            {
+                orderQuery = "order by " + StringUtils.join( orderFields, ',' );
+            }
+        }
+        else
+        {
+            if ( params.hasProgram() )
+            {
+                orderQuery = "order by case when pi.status = 'ACTIVE' then 1 when pi.status = 'COMPLETED' then 2 else 3 end asc, tei.lastUpdated desc ";
+            }
+        }
+
+        return orderQuery;
+    }
+
+    private List<String> getOrderParams( TrackedEntityInstanceQueryParams params  )
+    {
+        List<String> orderParams = new ArrayList<>();
+
+        if ( params.getOrders() != null && !params.getOrders().isEmpty() )
+        {
+            for ( String order : params.getOrders() )
+            {
+                String[] prop = order.split( ":" );
+
+                if ( prop.length == 2 && (prop[1].equals( "desc" ) || prop[1].equals( "asc" )) )
+                {
+                    orderParams.add( prop[0] );
+                }
+            }
+        }
+        return orderParams;
+    }
+
+    private String getGridOrderClause( TrackedEntityInstanceQueryParams params )
     {
         List<String> cols = getStaticGridColumns();
 
