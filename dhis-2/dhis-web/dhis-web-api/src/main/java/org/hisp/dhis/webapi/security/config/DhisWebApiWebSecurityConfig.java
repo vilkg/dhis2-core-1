@@ -480,6 +480,10 @@ public class DhisWebApiWebSecurityConfig
             .and()
             .httpStrictTransportSecurity()
             .and()
-            .frameOptions().sameOrigin();
+            .frameOptions().sameOrigin()
+            .contentSecurityPolicy(
+                "default-src 'none'; prefetch-src 'self' ; script-src 'self' 'unsafe-inline'; "
+                    + "connect-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; "
+                    + "base-uri 'self'; form-action 'self';" );
     }
 }
