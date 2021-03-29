@@ -482,8 +482,9 @@ public class DhisWebApiWebSecurityConfig
             .and()
             .frameOptions().sameOrigin()
             .contentSecurityPolicy(
-                "default-src 'none'; prefetch-src 'self' ; script-src 'self' 'unsafe-inline'; "
-                    + "connect-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; "
+                "default-src 'none'; prefetch-src 'self'; script-src 'self' data: 'unsafe-inline' 'unsafe-eval'; "
+                    + "connect-src 'self'; img-src 'self' data: *.fastly.net; connect-src 'self' *.fastly.net; "
+                    + "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; font-src 'self'; "
                     + "base-uri 'self'; form-action 'self';" );
     }
 }
