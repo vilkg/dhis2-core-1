@@ -483,7 +483,7 @@ public class DhisWebApiWebSecurityConfig
             .frameOptions().sameOrigin()
             .contentSecurityPolicy(
                 "default-src 'none'; prefetch-src 'self'; script-src 'self' data: 'unsafe-inline' 'unsafe-eval'; "
-                    + "connect-src 'self'; img-src 'self' data: *.fastly.net; connect-src 'self' *.fastly.net; "
+                    + "connect-src 'self' *.fastly.net; img-src 'self' data: *.fastly.net; "
                     + "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; font-src 'self'; "
                     + "base-uri 'self'; form-action 'self';" );
     }
