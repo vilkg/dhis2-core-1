@@ -173,6 +173,8 @@ public class DhisWebCommonsWebSecurityConfig
             super.configure( web );
             web
                 .ignoring()
+                .antMatchers( "/api/staticContent/**" )
+                .antMatchers( "/dhis-web-commons/oidc/**" )
                 .antMatchers( "/dhis-web-commons/javascripts/**" )
                 .antMatchers( "/dhis-web-commons/css/**" )
                 .antMatchers( "/dhis-web-commons/flags/**" )
@@ -205,6 +207,8 @@ public class DhisWebCommonsWebSecurityConfig
                 .antMatchers( "/dhis-web-commons/security/loginStrings.action" ).permitAll()
                 .antMatchers( "/dhis-web-commons/security/accountStrings.action" ).permitAll()
                 .antMatchers( "/dhis-web-commons/security/recoveryStrings.action" ).permitAll()
+                .antMatchers( "/dhis-web-commons/security/logo_front.png" ).permitAll()
+                .antMatchers( "/dhis-web-commons/security/logo_mobile.png" ).permitAll()
                 .antMatchers( "/dhis-web-dashboard/**" ).hasAnyAuthority( "ALL", "M_dhis-web-dashboard" )
                 .antMatchers( "/dhis-web-pivot/**" ).hasAnyAuthority( "ALL", "M_dhis-web-pivot" )
                 .antMatchers( "/dhis-web-visualizer/**" ).hasAnyAuthority( "ALL", "M_dhis-web-visualizer" )
