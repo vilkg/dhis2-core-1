@@ -38,6 +38,7 @@ import org.hisp.dhis.i18n.I18nManager;
 import org.hisp.dhis.security.MappedRedirectStrategy;
 import org.hisp.dhis.security.ldap.authentication.CustomLdapAuthenticationProvider;
 import org.hisp.dhis.security.oidc.DhisOidcLogoutSuccessHandler;
+import org.hisp.dhis.security.oidc.DhisOidcProviderRepository;
 import org.hisp.dhis.security.spring2fa.TwoFactorAuthenticationProvider;
 import org.hisp.dhis.security.spring2fa.TwoFactorWebAuthenticationDetailsSource;
 import org.hisp.dhis.security.vote.ActionAccessVoter;
@@ -158,6 +159,9 @@ public class DhisWebCommonsWebSecurityConfig
         @Autowired
         private DefaultAuthenticationEventPublisher authenticationEventPublisher;
 
+        @Autowired
+        private DhisOidcProviderRepository dhisOidcProviderRepository;
+
         public void configure( AuthenticationManagerBuilder auth )
             throws Exception
         {
@@ -264,7 +268,7 @@ public class DhisWebCommonsWebSecurityConfig
                 .csrf()
                 .disable()
 
-                .addFilterBefore( new CspNonceFilter( dhisConfig ), HeaderWriterFilter.class )
+                .addFilterBefore( new CspNonceFilter( dhisConfig, dhisOidcProviderRepository ), HeaderWriterFilter.class )
                 .addFilterBefore( CorsFilter.get(), BasicAuthenticationFilter.class )
                 .addFilterBefore( CustomAuthenticationFilter.get(), UsernamePasswordAuthenticationFilter.class );
 
