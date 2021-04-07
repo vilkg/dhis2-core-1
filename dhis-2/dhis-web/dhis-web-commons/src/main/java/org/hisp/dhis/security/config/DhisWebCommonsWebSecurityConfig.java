@@ -46,10 +46,15 @@ import org.hisp.dhis.security.vote.LogicalOrAccessDecisionManager;
 import org.hisp.dhis.security.vote.ModuleAccessVoter;
 import org.hisp.dhis.security.vote.SimpleAccessVoter;
 import org.hisp.dhis.webapi.filter.CorsFilter;
+import org.hisp.dhis.webapi.filter.CspNonceFilter;
 import org.hisp.dhis.webapi.filter.CustomAuthenticationFilter;
 import org.hisp.dhis.webapi.handler.CustomExceptionMappingAuthenticationFailureHandler;
 import org.hisp.dhis.webapi.handler.DefaultAuthenticationSuccessHandler;
 import org.hisp.dhis.webapi.security.Http401LoginUrlAuthenticationEntryPoint;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -72,11 +77,9 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.header.HeaderWriterFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 
 /**
  * @author Morten Svanæs <msvanaes@dhis2.org>
@@ -88,8 +91,7 @@ import com.google.common.collect.ImmutableSet;
 public class DhisWebCommonsWebSecurityConfig
 {
     /**
-     * This configuration class is responsible for setting up the session
-     * management.
+     * This configuration class is responsible for setting up the session management.
      */
     @Configuration
     @Order( 3300 )
@@ -114,11 +116,18 @@ public class DhisWebCommonsWebSecurityConfig
                 .expiredUrl( "/dhis-web-commons-security/logout.action" )
                 .sessionRegistry( sessionRegistry() );
         }
+
+        @Bean
+        public DefaultCookieSerializer defaultCookieSerializer()
+        {
+            DefaultCookieSerializer defaultCookieSerializer = new DefaultCookieSerializer();
+            defaultCookieSerializer.setCookieName( "mySessionId" );
+            return defaultCookieSerializer;
+        }
     }
 
     /**
-     * This configuration class is responsible for setting up the form login and
-     * everything related to the web pages.
+     * This configuration class is responsible for setting up the form login and everything related to the web pages.
      */
     @Configuration
     @Order( 2200 )
@@ -242,6 +251,7 @@ public class DhisWebCommonsWebSecurityConfig
                 .csrf()
                 .disable()
 
+                .addFilterBefore( new CspNonceFilter( configurationProvider ), HeaderWriterFilter.class )
                 .addFilterBefore( CorsFilter.get(), BasicAuthenticationFilter.class )
                 .addFilterBefore( CustomAuthenticationFilter.get(), UsernamePasswordAuthenticationFilter.class );
 

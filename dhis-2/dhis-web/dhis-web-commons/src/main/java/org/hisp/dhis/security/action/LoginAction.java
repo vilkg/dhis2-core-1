@@ -27,6 +27,8 @@
  */
 package org.hisp.dhis.security.action;
 
+import static org.hisp.dhis.webapi.filter.CspNonceFilter.CSP_REQUEST_NONCE_ATTR_NAME;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,17 +36,17 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.struts2.ServletActionContext;
 import org.hisp.dhis.external.conf.DhisConfigurationProvider;
 import org.hisp.dhis.i18n.ui.resourcebundle.ResourceBundleManager;
 import org.hisp.dhis.security.oidc.DhisOidcClientRegistration;
 import org.hisp.dhis.security.oidc.DhisOidcProviderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mobile.device.Device;
-import org.springframework.mobile.device.DeviceResolver;
 
 import com.google.common.collect.ImmutableMap;
 import com.opensymphony.xwork2.Action;
+import org.apache.struts2.ServletActionContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
+import org.springframework.mobile.device.DeviceResolver;
 
 /**
  * @author mortenoh
@@ -75,6 +77,12 @@ public class LoginAction
     // -------------------------------------------------------------------------
     // Input & Output
     // -------------------------------------------------------------------------
+    private String cspNonce = "";
+
+    public String getCspNonce()
+    {
+        return cspNonce;
+    }
 
     private Boolean failed = false;
 
@@ -111,6 +119,8 @@ public class LoginAction
         throws Exception
     {
         addRegisteredProviders();
+
+        cspNonce = (String) ServletActionContext.getRequest().getSession().getAttribute( CSP_REQUEST_NONCE_ATTR_NAME );
 
         Device device = deviceResolver.resolveDevice( ServletActionContext.getRequest() );
 

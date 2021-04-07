@@ -28,7 +28,6 @@
 package org.hisp.dhis.webapi.security.config;
 
 import java.util.Set;
-
 import javax.sql.DataSource;
 
 import org.hisp.dhis.external.conf.ConfigurationKey;
@@ -46,6 +45,8 @@ import org.hisp.dhis.webapi.filter.CorsFilter;
 import org.hisp.dhis.webapi.filter.CustomAuthenticationFilter;
 import org.hisp.dhis.webapi.oprovider.DhisOauthAuthenticationProvider;
 import org.hisp.dhis.webapi.security.DHIS2BasicAuthenticationEntryPoint;
+
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -88,8 +89,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * @author Morten Svanæs <msvanaes@dhis2.org>
@@ -481,10 +480,9 @@ public class DhisWebApiWebSecurityConfig
             .httpStrictTransportSecurity()
             .and()
             .frameOptions().sameOrigin()
-            .contentSecurityPolicy(
-                "default-src 'none'; prefetch-src 'self'; script-src 'self' data: 'unsafe-inline' 'unsafe-eval'; "
-                    + "connect-src 'self' *.fastly.net; img-src 'self' data: *.fastly.net; "
-                    + "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; font-src 'self'; "
-                    + "base-uri 'self'; form-action 'self';" );
+            .contentSecurityPolicy( "prefetch-src 'self'; script-src 'self' 'nonce-{nonce}'; "
+                + "connect-src 'self' *.fastly.net; img-src 'self' data: *.fastly.net; "
+                + "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; "
+                + "font-src 'self'; base-uri 'self' ; form-action 'self'; object-src 'none'" );
     }
 }
