@@ -140,7 +140,7 @@ public class DhisWebCommonsWebSecurityConfig
         private I18nManager i18nManager;
 
         @Autowired
-        private DhisConfigurationProvider configurationProvider;
+        private DhisConfigurationProvider dhisConfig;
 
         @Autowired
         private ExternalAccessVoter externalAccessVoter;
@@ -260,11 +260,11 @@ public class DhisWebCommonsWebSecurityConfig
                 .csrf()
                 .disable()
 
-                .addFilterBefore( new CspNonceFilter( configurationProvider ), HeaderWriterFilter.class )
+                .addFilterBefore( new CspNonceFilter( dhisConfig ), HeaderWriterFilter.class )
                 .addFilterBefore( CorsFilter.get(), BasicAuthenticationFilter.class )
                 .addFilterBefore( CustomAuthenticationFilter.get(), UsernamePasswordAuthenticationFilter.class );
 
-            setHttpHeaders( http );
+            setHttpHeaders( http, dhisConfig );
         }
 
         @Bean
@@ -280,10 +280,10 @@ public class DhisWebCommonsWebSecurityConfig
         {
             DefaultAuthenticationSuccessHandler successHandler = new DefaultAuthenticationSuccessHandler();
             successHandler.setRedirectStrategy( mappedRedirectStrategy() );
-            if ( configurationProvider.getProperty( ConfigurationKey.SYSTEM_SESSION_TIMEOUT ) != null )
+            if ( dhisConfig.getProperty( ConfigurationKey.SYSTEM_SESSION_TIMEOUT ) != null )
             {
                 successHandler.setSessionTimeout(
-                    Integer.parseInt( configurationProvider.getProperty( ConfigurationKey.SYSTEM_SESSION_TIMEOUT ) ) );
+                    Integer.parseInt( dhisConfig.getProperty( ConfigurationKey.SYSTEM_SESSION_TIMEOUT ) ) );
             }
 
             return successHandler;
