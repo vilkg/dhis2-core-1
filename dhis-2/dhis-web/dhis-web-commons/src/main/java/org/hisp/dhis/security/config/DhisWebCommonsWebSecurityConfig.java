@@ -52,10 +52,6 @@ import org.hisp.dhis.webapi.filter.CustomAuthenticationFilter;
 import org.hisp.dhis.webapi.handler.CustomExceptionMappingAuthenticationFailureHandler;
 import org.hisp.dhis.webapi.handler.DefaultAuthenticationSuccessHandler;
 import org.hisp.dhis.webapi.security.Http401LoginUrlAuthenticationEntryPoint;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -82,6 +78,10 @@ import org.springframework.security.web.header.HeaderWriterFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
 /**
  * @author Morten Svanæs <msvanaes@dhis2.org>
  */
@@ -92,7 +92,8 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 public class DhisWebCommonsWebSecurityConfig
 {
     /**
-     * This configuration class is responsible for setting up the session management.
+     * This configuration class is responsible for setting up the session
+     * management.
      */
     @Configuration
     @Order( 3300 )
@@ -128,7 +129,8 @@ public class DhisWebCommonsWebSecurityConfig
     }
 
     /**
-     * This configuration class is responsible for setting up the form login and everything related to the web pages.
+     * This configuration class is responsible for setting up the form login and
+     * everything related to the web pages.
      */
     @Configuration
     @Order( 2200 )
@@ -268,7 +270,8 @@ public class DhisWebCommonsWebSecurityConfig
                 .csrf()
                 .disable()
 
-                .addFilterBefore( new CspNonceFilter( dhisConfig, dhisOidcProviderRepository ), HeaderWriterFilter.class )
+                .addFilterBefore( new CspNonceFilter( dhisConfig, dhisOidcProviderRepository ),
+                    HeaderWriterFilter.class )
                 .addFilterBefore( CorsFilter.get(), BasicAuthenticationFilter.class )
                 .addFilterBefore( CustomAuthenticationFilter.get(), UsernamePasswordAuthenticationFilter.class );
 

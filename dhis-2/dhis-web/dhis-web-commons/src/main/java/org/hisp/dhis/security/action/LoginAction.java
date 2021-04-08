@@ -36,17 +36,17 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.struts2.ServletActionContext;
 import org.hisp.dhis.external.conf.DhisConfigurationProvider;
 import org.hisp.dhis.i18n.ui.resourcebundle.ResourceBundleManager;
 import org.hisp.dhis.security.oidc.DhisOidcClientRegistration;
 import org.hisp.dhis.security.oidc.DhisOidcProviderRepository;
-
-import com.google.common.collect.ImmutableMap;
-import com.opensymphony.xwork2.Action;
-import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.DeviceResolver;
+
+import com.google.common.collect.ImmutableMap;
+import com.opensymphony.xwork2.Action;
 
 /**
  * @author mortenoh
