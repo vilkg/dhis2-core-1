@@ -563,6 +563,11 @@ public abstract class AbstractJdbcTableManager
         log.debug( "{} with SQL: '{}'", logMessage, sql );
 
         Timer timer = new SystemTimer().start();
+        log.info( "**************************" );
+        log.info( "**************************" );
+        log.info( sql );
+        log.info( "**************************" );
+        log.info( "**************************" );
 
         jdbcTemplate.execute( sql );
 
