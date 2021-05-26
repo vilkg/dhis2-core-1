@@ -344,6 +344,8 @@ public class JdbcAnalyticsTableManager
         {
             sql += "and " + whereClause;
         }
+
+        log.info( sql );
         invokeTimeAndLog( sql, String.format( "Populate %s %s", tableName, valueTypes ) );
     }
 
