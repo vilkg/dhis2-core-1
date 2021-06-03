@@ -123,6 +123,8 @@ public class Log4JLogConfigInitializer
 
         locationManager.buildDirectory( LOG_DIR );
 
+        configureLoggers( "hibernate.log",
+            Lists.newArrayList( "org.hibernate" ) );
         configureLoggers( ANALYTICS_TABLE_LOGGER_FILENAME,
             Lists.newArrayList( "org.hisp.dhis.resourcetable", "org.hisp.dhis.analytics.table" ) );
 
