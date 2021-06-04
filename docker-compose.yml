@@ -1,0 +1,8 @@
+version: "3.6"
+
+services:
+  dhis2-base:
+    image: tons/dhis2-base
+    build:
+      context: .
+      dockerfile: Dockerfile.base

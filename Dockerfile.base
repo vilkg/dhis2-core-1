@@ -1,0 +1,2 @@
+FROM adoptopenjdk/openjdk11:jre-11.0.8_10-alpine
+RUN mkdir /opt/dhis2 && chown nobody.nobody /opt/dhis2
