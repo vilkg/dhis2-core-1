@@ -120,7 +120,7 @@ public class EnrollmentAnalyticsManagerTest
 
         String expected = "ax.\"monthly\",ax.\"ou\"  from " + getTable( programA.getUid() )
             + " as ax where enrollmentdate >= '2017-01-01' and enrollmentdate <= '2017-12-31'"
-            + " and executiondate >= '2017-01-01' and executiondate <= '2017-12-31' and (uidlevel0 = 'ouabcdefghA' ) limit 10001";
+            + " and (executiondate >= '2017-01-01' and executiondate <= '2017-12-31' or executiondate is null)and (uidlevel0 = 'ouabcdefghA' ) limit 10001";
 
         assertSql( sql.getValue(), expected );
 
@@ -237,7 +237,7 @@ public class EnrollmentAnalyticsManagerTest
             + programIndicatorA.getUid()
             + "\"  " + "from analytics_enrollment_" + programA.getUid()
             + " as ax where enrollmentdate >= '2015-01-01' and enrollmentdate <= '2017-04-08'"
-            + " and executiondate >= '2015-01-01' and executiondate <= '2017-04-08' and (uidlevel0 = 'ouabcdefghA' ) limit 101";
+            + " and (executiondate >= '2015-01-01' and executiondate <= '2017-04-08' or executiondate is null)and (uidlevel0 = 'ouabcdefghA' ) limit 101";
 
         assertSql( sql.getValue(), expected );
     }
@@ -278,7 +278,7 @@ public class EnrollmentAnalyticsManagerTest
             "= " + relationshipTypeA.getId() + " AND pi.uid = ax.pi ))" + " as \"" + programIndicatorA.getUid() + "\"  "
             + "from analytics_enrollment_" + programA.getUid()
             + " as ax where enrollmentdate >= '2015-01-01' and enrollmentdate <= '2017-04-08' "
-            + "and executiondate >= '2015-01-01' and executiondate <= '2017-04-08' and (uidlevel0 = 'ouabcdefghA' ) limit 101";
+            + "and (executiondate >= '2015-01-01' and executiondate <= '2017-04-08' or executiondate is null)and (uidlevel0 = 'ouabcdefghA' ) limit 101";
 
         assertSql( sql.getValue(), expected );
     }
@@ -350,7 +350,7 @@ public class EnrollmentAnalyticsManagerTest
             + programIndicatorA.getUid()
             + "\"  " + "from analytics_enrollment_" + programA.getUid()
             + " as ax where enrollmentdate >= '2015-01-01' and enrollmentdate <= '2017-04-08' "
-            + "and executiondate >= '2015-01-01' and executiondate <= '2017-04-08' and (uidlevel0 = 'ouabcdefghA' ) limit 101";
+            + "and (executiondate >= '2015-01-01' and executiondate <= '2017-04-08' or executiondate is null)and (uidlevel0 = 'ouabcdefghA' ) limit 101";
 
         assertSql( sql.getValue(), expected );
     }
