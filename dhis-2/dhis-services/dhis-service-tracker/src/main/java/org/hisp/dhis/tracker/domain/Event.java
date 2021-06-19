@@ -36,11 +36,10 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import org.hisp.dhis.common.BaseLinkableObject;
 import org.hisp.dhis.event.EventStatus;
+import org.hisp.dhis.tracker.TrackerType;
 import org.locationtech.jts.geom.Geometry;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,11 +50,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Data
 @Builder
-@EqualsAndHashCode( callSuper = true )
 @NoArgsConstructor
 @AllArgsConstructor
 public class Event
-    extends BaseLinkableObject
     implements TrackerDto
 {
     @JsonProperty
@@ -75,16 +72,10 @@ public class Event
     private String enrollment;
 
     @JsonProperty
-    private EnrollmentStatus enrollmentStatus;
-
-    @JsonProperty
     private String orgUnit;
 
     @JsonProperty
     private String orgUnitName;
-
-    @JsonProperty
-    private String trackedEntity;
 
     @JsonProperty
     @Builder.Default
@@ -136,6 +127,12 @@ public class Event
     private String assignedUser;
 
     @JsonProperty
+    private String createdBy;
+
+    @JsonProperty
+    private String updatedBy;
+
+    @JsonProperty
     @Builder.Default
     private Set<DataValue> dataValues = new HashSet<>();
 
@@ -153,5 +150,11 @@ public class Event
     public String getUid()
     {
         return this.event;
+    }
+
+    @Override
+    public TrackerType getTrackerType()
+    {
+        return TrackerType.EVENT;
     }
 }

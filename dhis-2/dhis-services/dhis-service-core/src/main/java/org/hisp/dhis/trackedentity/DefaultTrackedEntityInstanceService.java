@@ -185,11 +185,6 @@ public class DefaultTrackedEntityInstanceService
 
         params.setUser( user );
 
-        if ( !params.isPaging() && !params.isSkipPaging() )
-        {
-            params.setDefaultPaging();
-        }
-
         params.handleCurrentUserSelectionMode();
 
         List<TrackedEntityInstance> trackedEntityInstances = trackedEntityInstanceStore
@@ -242,11 +237,6 @@ public class DefaultTrackedEntityInstanceService
         User user = currentUserService.getCurrentUser();
 
         params.setUser( user );
-
-        if ( !params.isPaging() && !params.isSkipPaging() )
-        {
-            params.setDefaultPaging();
-        }
 
         params.handleCurrentUserSelectionMode();
 
@@ -773,7 +763,7 @@ public class DefaultTrackedEntityInstanceService
 
     private boolean isProgramMinAttributesViolated( TrackedEntityInstanceQueryParams params )
     {
-        if ( params.hasUniqueFilters() )
+        if ( params.hasUniqueFilter() )
         {
             return false;
         }
@@ -788,7 +778,7 @@ public class DefaultTrackedEntityInstanceService
 
     private boolean isTeTypeMinAttributesViolated( TrackedEntityInstanceQueryParams params )
     {
-        if ( params.hasUniqueFilters() )
+        if ( params.hasUniqueFilter() )
         {
             return false;
         }

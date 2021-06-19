@@ -27,6 +27,8 @@
  */
 package org.hisp.dhis.dxf2.importsummary;
 
+import java.util.Objects;
+
 import org.hisp.dhis.common.DxfNamespaces;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,8 +36,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement( localName = "conflict", namespace = DxfNamespaces.DXF_2_0 )
-public class ImportConflict
+public final class ImportConflict
 {
+
     private String object;
 
     private String value;
@@ -96,36 +99,19 @@ public class ImportConflict
      * objects.
      */
     @Override
-    public boolean equals( Object o )
+    public boolean equals( Object obj )
     {
-        if ( this == o )
+        if ( this == obj )
         {
             return true;
         }
-
-        if ( o == null )
+        if ( !(obj instanceof ImportConflict) )
         {
             return false;
         }
 
-        if ( !getClass().isAssignableFrom( o.getClass() ) )
-        {
-            return false;
-        }
-
-        final ImportConflict other = (ImportConflict) o;
-
-        if ( object != null ? !object.equals( other.object ) : other.object != null )
-        {
-            return false;
-        }
-
-        if ( value != null ? !value.equals( other.value ) : other.value != null )
-        {
-            return false;
-        }
-
-        return true;
+        final ImportConflict other = (ImportConflict) obj;
+        return Objects.equals( object, other.object ) && Objects.equals( value, other.value );
     }
 
     @Override

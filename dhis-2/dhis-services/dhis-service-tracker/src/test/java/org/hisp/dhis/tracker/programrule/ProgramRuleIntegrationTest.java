@@ -46,7 +46,6 @@ import org.hisp.dhis.program.ProgramStage;
 import org.hisp.dhis.programrule.*;
 import org.hisp.dhis.render.RenderFormat;
 import org.hisp.dhis.render.RenderService;
-import org.hisp.dhis.setting.SystemSettingManager;
 import org.hisp.dhis.tracker.TrackerImportParams;
 import org.hisp.dhis.tracker.TrackerImportService;
 import org.hisp.dhis.tracker.TrackerImportStrategy;
@@ -82,9 +81,6 @@ public class ProgramRuleIntegrationTest
     @Autowired
     private ObjectBundleValidationService objectBundleValidationService;
 
-    @Autowired
-    private SystemSettingManager systemSettingManager;
-
     private User userA;
 
     @Override
@@ -110,12 +106,17 @@ public class ProgramRuleIntegrationTest
         objectBundleService.commit( bundle );
 
         Program program = bundle.getPreheat().get( PreheatIdentifier.UID, Program.class, "BFcipDERJnf" );
+        Program programWithoutRegistration = bundle.getPreheat()
+            .get( PreheatIdentifier.UID, Program.class, "BFcipDERJne" );
         DataElement dataElement = bundle.getPreheat().get( PreheatIdentifier.UID, DataElement.class, "DATAEL00001" );
         ProgramStage programStage = bundle.getPreheat().get( PreheatIdentifier.UID, ProgramStage.class, "NpsdDv6kKSO" );
 
         ProgramRule programRuleA = createProgramRule( 'A', program );
         programRuleA.setUid( "ProgramRule" );
         programRuleService.addProgramRule( programRuleA );
+
+        ProgramRule programRuleWithoutRegistration = createProgramRule( 'W', programWithoutRegistration );
+        programRuleService.addProgramRule( programRuleWithoutRegistration );
 
         ProgramRule programRuleB = createProgramRule( 'B', program );
         programRuleB.setProgramStage( programStage );
@@ -139,12 +140,29 @@ public class ProgramRuleIntegrationTest
 
         programRuleA.getProgramRuleActions().add( programRuleActionShowWarning );
         programRuleA.getProgramRuleActions().add( programRuleActionAssign );
-        programRuleService.updateProgramRule( programRuleA );
+
+        programRuleWithoutRegistration.getProgramRuleActions().add( programRuleActionShowWarning );
+        programRuleService.updateProgramRule( programRuleWithoutRegistration );
 
         programRuleB.getProgramRuleActions().add( programRuleActionShowWarningForProgramStage );
         programRuleService.updateProgramRule( programRuleB );
 
         userA = userService.getUser( "M5zQapPyTZI" );
+    }
+
+    @Test
+    public void testImportProgramEventSuccessWithWarningRaised()
+        throws IOException
+    {
+        InputStream inputStream = new ClassPathResource( "tracker/program_event.json" ).getInputStream();
+
+        TrackerImportParams params = renderService.fromJson( inputStream, TrackerImportParams.class );
+        params.setUserId( userA.getUid() );
+        TrackerImportReport trackerImportReport = trackerImportService.importTracker( params );
+
+        assertNotNull( trackerImportReport );
+        assertEquals( TrackerStatus.OK, trackerImportReport.getStatus() );
+        assertEquals( 1, trackerImportReport.getValidationReport().getWarningReports().size() );
     }
 
     @Test

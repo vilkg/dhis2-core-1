@@ -27,7 +27,8 @@
  */
 package org.hisp.dhis.webapi;
 
-import static org.hisp.dhis.webapi.documentation.common.TestUtils.APPLICATION_JSON_UTF8;
+import static org.hisp.dhis.webapi.utils.TestUtils.APPLICATION_JSON_PATCH_UTF8;
+import static org.hisp.dhis.webapi.utils.TestUtils.APPLICATION_JSON_UTF8;
 import static org.hisp.dhis.webapi.utils.WebClientUtils.assertSeries;
 import static org.hisp.dhis.webapi.utils.WebClientUtils.assertStatus;
 import static org.hisp.dhis.webapi.utils.WebClientUtils.failOnException;
@@ -38,9 +39,9 @@ import static org.hisp.dhis.webapi.utils.WebClientUtils.startWithMediaType;
 import static org.hisp.dhis.webapi.utils.WebClientUtils.substitutePlaceholders;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -49,13 +50,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.hisp.dhis.webapi.json.JsonResponse;
 import org.hisp.dhis.webapi.json.domain.JsonError;
 import org.hisp.dhis.webapi.utils.ContextUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatus.Series;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.testcontainers.shaded.com.google.common.io.ByteStreams;
 
@@ -85,6 +89,11 @@ public interface WebClient
     static Header JwtToken( String token )
     {
         return Header( "Authorization", "Bearer " + token );
+    }
+
+    static Header ContentType( MediaType mimeType )
+    {
+        return Header( "ContentType", mimeType );
     }
 
     static Body Body( String body )
@@ -130,14 +139,22 @@ public interface WebClient
         return webRequest( post( url ), new Body( body ) );
     }
 
+    default HttpResponse POST_MULTIPART( String url, MockMultipartFile part )
+    {
+        return webRequest( multipart( url ).file( part ) );
+    }
+
     default HttpResponse PATCH( String url, Object... args )
     {
-        return webRequest( patch( substitutePlaceholders( url, args ) ), requestComponentsIn( args ) );
+        return webRequest( patch( substitutePlaceholders( url, args ) ),
+            // default mime type is added as first element so that ContentType
+            // in args does override it
+            ArrayUtils.insert( 0, requestComponentsIn( args ), ContentType( APPLICATION_JSON_PATCH_UTF8 ) ) );
     }
 
     default HttpResponse PATCH( String url, String body )
     {
-        return webRequest( patch( url ), new Body( body ) );
+        return webRequest( patch( url ), ContentType( APPLICATION_JSON_PATCH_UTF8 ), Body( body ) );
     }
 
     default HttpResponse PUT( String url, Object... args )
@@ -163,33 +180,45 @@ public interface WebClient
     default HttpResponse webRequest( MockHttpServletRequestBuilder request, RequestComponent... components )
     {
         // configure headers
+        MediaType contentMediaType = null;
         for ( RequestComponent c : components )
         {
             if ( c instanceof Header )
             {
                 Header header = (Header) c;
-                request.header( header.name, header.value );
+                if ( header.name.equalsIgnoreCase( "ContentType" ) )
+                {
+                    contentMediaType = (MediaType) header.value;
+                }
+                else
+                {
+                    request.header( header.name, header.value );
+                }
             }
         }
         // configure body
         Body bodyComponent = getComponent( Body.class, components );
         String body = bodyComponent == null ? "" : bodyComponent.body;
+
         if ( body != null && body.endsWith( ".json" ) )
         {
+            MediaType fileContentType = contentMediaType != null ? contentMediaType : APPLICATION_JSON_UTF8;
             return failOnException( () -> webRequest( request
-                .contentType( APPLICATION_JSON_UTF8 )
+                .contentType( fileContentType )
                 .content( ByteStreams.toByteArray( new ClassPathResource( body ).getInputStream() ) ) ) );
         }
+
         if ( startWithMediaType( body ) )
         {
             return webRequest( request
                 .contentType( body.substring( 0, body.indexOf( ':' ) ) )
                 .content( body.substring( body.indexOf( ':' ) + 1 ) ) );
         }
+
         return body == null || body.isEmpty()
             ? webRequest( request )
             : webRequest( request
-                .contentType( APPLICATION_JSON )
+                .contentType( contentMediaType != null ? contentMediaType : MediaType.APPLICATION_JSON )
                 .content( plainTextOrJson( body ) ) );
     }
 

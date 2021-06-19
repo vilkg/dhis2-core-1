@@ -267,7 +267,8 @@ public class HibernateGenericStore<T>
     }
 
     /**
-     * Get List objects return by querying given JpaQueryParameters
+     * Get List objects return by querying given JpaQueryParameters with
+     * Pagination
      *
      * @param parameters JpaQueryParameters
      * @return list objects

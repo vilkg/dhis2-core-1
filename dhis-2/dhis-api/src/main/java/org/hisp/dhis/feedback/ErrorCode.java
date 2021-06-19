@@ -84,6 +84,7 @@ public enum ErrorCode
     E2035( "Operator not supported: `{0}`" ),
     E2036( "Combination not supported: `{0}`" ),
     E2037( "Order not supported: `{0}`" ),
+    E2038( "Field not supported: `{0}`" ),
 
     /* Outlier detection */
     E2200( "At least one data element must be specified" ),
@@ -96,6 +97,10 @@ public enum ErrorCode
     E2207( "Data start date must be before data end date" ),
     E2208( "Non-numeric data values encountered during outlier value detection" ),
 
+    /* Followup analysis */
+    E2300( "At least one data element or data set must be specified" ),
+    E2301( "Start date and end date must be specified directly or indirectly by specifying a period" ),
+
     /* Security */
     E3000( "User `{0}` is not allowed to create objects of type {1}." ),
     E3001( "User `{0}` is not allowed to update object `{1}`." ),
@@ -107,8 +112,7 @@ public enum ErrorCode
     E3008( "User `{0}` is not allowed to make public objects of type `{1}`." ),
     E3009( "User `{0}` is not allowed to make private objects of type `{1}`." ),
     E3010( "Invalid access string `{0}`." ),
-    E3011(
-        "Data sharing is not enabled for type `{0}`, but one or more access strings contains data sharing read or write." ),
+    E3011( "Data sharing is not enabled for type `{0}`, but access strings contain data sharing read or write." ),
     E3012( "User `{0}` does not have read access for object `{1}`." ),
     E3013( "Sharing settings of system default metadata object of type `{0}` cannot be modified." ),
     E3014( "You do not have manage access to this object." ),
@@ -150,7 +154,27 @@ public enum ErrorCode
     E4029( "Job parameters cannot be null for job type: {0}" ),
     E4030( "Object could not be deleted because it is associated with another object: {0}" ),
 
-    E4032( "A program rule variable with name `{0}` and program uid `{1}` already exists" ),
+    /* ProgramRuleAction validation */
+    E4033( "A program rule action of type `{0}` associated with program rule name `{1}` is invalid" ),
+    E4034( "ProgramNotificationTemplate `{0}` associated with program rule name `{1}` does not exist" ),
+    E4035( "ProgramNotificationTemplate cannot be null for program rule name `{0}`" ),
+    E4036( "ProgramStageSection cannot be null for program rule `{0}`" ),
+    E4037( "ProgramStageSection `{0}` associated with program rule `{1}` does not exist" ),
+    E4038( "ProgramStage cannot be null for program rule `{0}`" ),
+    E4039( "ProgramStage `{0}` associated with program rule `{1}` does not exist" ),
+    E4040( "Option cannot be null for program rule `{0}`" ),
+    E4041( "Option `{0}` associated with program rule `{1}` does not exist" ),
+    E4042( "OptionGroup cannot be null for program rule `{0}`" ),
+    E4043( "OptionGroup `{0}` associated with program rule `{1}` does not exist" ),
+    E4044( "DataElement or TrackedEntityAttribute cannot be null for program rule `{0}`" ),
+    E4045( "DataElement `{0}` associated with program rule `{1}` does not exist" ),
+    E4046( "TrackedEntityAttribute `{0}` associated with program rule `{1}` does not exist" ),
+    E4047( "DataElement `{0}` is not linked to any ProgramStageDataElement for program rule `{1}`" ),
+    E4048( "TrackedEntityAttribute `{0}` is not linked to ProgramTrackedEntityAttribute for program rule `{1}`" ),
+
+    /* ProgramRuleVariable validation */
+    E4051( "A program rule variable with name `{0}` and program uid `{1}` already exists" ),
+    E4052( "For program rule variable with name `{0}` following keywords are forbidden : and , or , not" ),
 
     /* SQL views */
     E4300( "SQL query is null" ),
@@ -168,9 +192,8 @@ public enum ErrorCode
     E4312( "Current user is not authorised to read data from SQL view: `{0}`" ),
 
     /* Preheat */
-    E5000(
-        "Found matching object for given reference, but import mode is CREATE. Identifier was {0}, and object was {1}." ),
-    E5001( "No matching object for given reference. Identifier was {0}, and object was {1}." ),
+    E5000( "Found matching object for reference, but import mode is CREATE. Identifier was {0}, and object was {1}." ),
+    E5001( "No matching object for reference. Identifier was {0}, and object was {1}." ),
     E5002( "Invalid reference {0} on object {1} for association `{2}`." ),
     E5003( "Property `{0}` with value `{1}` on object {2} already exists on object {3}." ),
     E5004( "Id `{0}` for type `{1}` exists on more than 1 object in the payload, removing all but the first found." ),
@@ -178,8 +201,8 @@ public enum ErrorCode
 
     /* Metadata import */
     E6000( "Program `{0}` has more than one Program Instances" ),
-    E6001(
-        "ProgramStage `{0}` has invalid next event scheduling property `{1}`. This property need to be data element of value type date and belong the program stage." ),
+    E6001( "ProgramStage `{0}` has invalid next event scheduling property `{1}`. " +
+        "This property need to be data element of value type date and belong the program stage." ),
 
     /* File resource */
     E6100( "Filename not present" ),
@@ -189,16 +212,12 @@ public enum ErrorCode
     E6200( "Feedback message recipients user group not defined" ),
 
     /* Scheduling */
-    E7000(
-        "Failed to add/update job configuration, another job of the same type already scheduled with cron expression: `{0}`" ),
-    E7002( "Failed to add/update job configuration, UID does not exist" ),
-    E7003(
-        "Failed to add/update job configuration, only interval can be configured for non configurable job type: `{0}`" ),
-    E7004(
-        "Failed to add/update job configuration, cron expression must be not null for job with scheduling type CRON: `{0}`" ),
-    E7005( "Failed to add/update job configuration, cron expression is invalid: `{0}` " ),
+    E7000( "Job of same type already scheduled with cron expression: `{0}`" ),
+    E7003( "Only interval property can be configured for non configurable job type: `{0}`" ),
+    E7004( "Cron expression must be not null for job with scheduling type CRON: `{0}`" ),
+    E7005( "Cron expression is invalid for job: `{0}` " ),
     E7006( "Failed to execute job: `{0}`." ),
-    E7007( "Failed to add/update job configuration, delay must be not null with scheduling type FIXED_DELAY: `{0}`" ),
+    E7007( "Delay must be not null for job with scheduling type FIXED_DELAY: `{0}`" ),
     E7010( "Failed to validate job runtime: `{0}`" ),
 
     /* Aggregate analytics */
@@ -216,7 +235,7 @@ public enum ErrorCode
     E7111( "Dimensions cannot be specified more than once: `{0}`" ),
     E7112( "Reporting rates can only be specified together with dimensions of type: `{0}`" ),
     E7113( "Assigned categories cannot be specified when data elements are not specified" ),
-    E7114( "Assigned categories can only be specified together with data elements, not indicators or reporting rates" ),
+    E7114( "Assigned categories can only be specified together with data elements" ),
     E7115( "Data elements must be of a value and aggregation type that allow aggregation: `{0}`" ),
     E7116( "Indicator expressions cannot contain cyclic references: `{0}`" ),
     E7117( "A data dimension 'dx' must be specified when output format is DATA_VALUE_SET" ),
@@ -257,8 +276,8 @@ public enum ErrorCode
     E7216( "Query item must be aggregateable when used in aggregate query: `{0}`" ),
     E7217( "User is not allowed to view event analytics data: `{0}`" ),
     E7218( "Spatial database support is not enabled" ),
-    E7219( "Data element must be of value type coordinate or org unit in order to be used as coordinate field: `{0}`" ),
-    E7220( "Attribute must be of value type coordinate or org unit in order to be used as coordinate field: `{0}`" ),
+    E7219( "Data element must be of value type coordinate or org unit to be used as coordinate field: `{0}`" ),
+    E7220( "Attribute must be of value type coordinate or org unit to be used as coordinate field: `{0}`" ),
     E7221( "Coordinate field is invalid: `{0}`" ),
     E7222( "Query item or filter is invalid: `{0}`" ),
     E7223( "Value does not refer to a data element or attribute which are numeric and part of the program: `{0}`" ),
@@ -266,6 +285,7 @@ public enum ErrorCode
     E7225( "Program stage is mandatory for data element dimensions in enrollment analytics queries: `{0}`" ),
     E7226( "Dimension is not a valid query item: `{0}`" ),
     E7227( "Relationship entity type not supported: `{0}`" ),
+    E7228( "Fallback coordinate field is invalid: `{0}` " ),
 
     /* Org unit analytics */
     E7300( "At least one organisation unit must be specified" ),

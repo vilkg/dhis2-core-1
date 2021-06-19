@@ -167,8 +167,9 @@ public class DhisWebCommonsWebSecurityConfig
         public void configure( AuthenticationManagerBuilder auth )
             throws Exception
         {
-            auth.authenticationProvider( twoFactorAuthenticationProvider );
             auth.authenticationProvider( customLdapAuthenticationProvider );
+            auth.authenticationProvider( twoFactorAuthenticationProvider );
+
             auth.authenticationEventPublisher( authenticationEventPublisher );
         }
 
