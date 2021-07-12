@@ -68,14 +68,14 @@ public class HibernatePotentialDuplicateStore
 
             hibernateQuery.setParameterList( "uids", teis );
 
-            setStatusParameter( query.getStatus(), hibernateQuery );
+            setStatusParameter( query, hibernateQuery );
 
             return hibernateQuery.getSingleResult().intValue();
         } ).orElseGet( () -> {
 
             Query<Long> hibernateQuery = getTypedQuery( queryString );
 
-            setStatusParameter( query.getStatus(), hibernateQuery );
+            setStatusParameter( query, hibernateQuery );
 
             return hibernateQuery.getSingleResult().intValue();
         } );
@@ -92,42 +92,29 @@ public class HibernatePotentialDuplicateStore
 
             hibernateQuery.setParameterList( "uids", teis );
 
-            setStatusParameter( query.getStatus(), hibernateQuery );
+            setStatusParameter( query, hibernateQuery );
 
             return hibernateQuery.getResultList();
         } ).orElseGet( () -> {
 
             Query<PotentialDuplicate> hibernateQuery = getTypedQuery( queryString );
 
-            setStatusParameter( query.getStatus(), hibernateQuery );
+            setStatusParameter( query, hibernateQuery );
 
             return hibernateQuery.getResultList();
         } );
     }
 
-    @Override
-    public List<PotentialDuplicate> getAllByTei( String tei, DeduplicationStatus status )
+    private void setStatusParameter( PotentialDuplicateQuery query, Query<?> hibernateQuery )
     {
-        Query<PotentialDuplicate> query = getTypedQuery(
-            "from PotentialDuplicate pr where pr.status in (:status) and pr.teiA = :tei or pr.teiB = :tei" );
-
-        query.setParameter( "tei", tei );
-
-        setStatusParameter( status, query );
-
-        return query.getResultList();
-    }
-
-    private void setStatusParameter( DeduplicationStatus status, Query<?> hibernateQuery )
-    {
-        if ( status == DeduplicationStatus.ALL )
+        if ( query.getStatus() == DeduplicationStatus.ALL )
         {
             hibernateQuery.setParameterList( "status", Arrays.stream( DeduplicationStatus.values() )
                 .filter( s -> s != DeduplicationStatus.ALL ).collect( Collectors.toSet() ) );
         }
         else
         {
-            hibernateQuery.setParameterList( "status", Collections.singletonList( status ) );
+            hibernateQuery.setParameterList( "status", Collections.singletonList( query.getStatus() ) );
         }
     }
 

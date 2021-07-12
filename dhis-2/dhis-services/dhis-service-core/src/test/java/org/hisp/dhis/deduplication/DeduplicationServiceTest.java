@@ -126,17 +126,6 @@ public class DeduplicationServiceTest
     }
 
     @Test
-    public void testGetPotentialDuplicateByTei()
-    {
-        PotentialDuplicate potentialDuplicate = new PotentialDuplicate( teiA, teiB );
-        potentialDuplicate.setStatus( DeduplicationStatus.INVALID );
-        deduplicationService.addPotentialDuplicate( potentialDuplicate );
-
-        assertEquals( Collections.singletonList( potentialDuplicate ),
-            deduplicationService.getPotentialDuplicateByTei( teiA, DeduplicationStatus.INVALID ) );
-    }
-
-    @Test
     public void testGetAllPotentialDuplicates()
     {
         PotentialDuplicate potentialDuplicate = new PotentialDuplicate( teiA, teiB );
@@ -201,7 +190,7 @@ public class DeduplicationServiceTest
         deduplicationService.addPotentialDuplicate( potentialDuplicate1 );
         deduplicationService.addPotentialDuplicate( potentialDuplicate2 );
 
-        query.setTeis( Collections.singletonList( teiA ) );
+        query.setTeis( Arrays.asList( teiA ) );
 
         List<PotentialDuplicate> list = deduplicationService.getAllPotentialDuplicatesBy( query );
 
