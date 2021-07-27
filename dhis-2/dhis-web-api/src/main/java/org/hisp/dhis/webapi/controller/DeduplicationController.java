@@ -183,9 +183,9 @@ public class DeduplicationController
     {
         if ( deduplicationStatus == DeduplicationStatus.MERGED )
             throw new BadRequestException(
-                "Bad request. Can't update a potential duplicate to " + DeduplicationStatus.MERGED.name() );
+                "Can't update a potential duplicate to " + DeduplicationStatus.MERGED.name() );
         if ( potentialDuplicate.getStatus() == DeduplicationStatus.MERGED )
-            throw new BadRequestException( "Bad request. Can't update a potential duplicate that is already "
+            throw new BadRequestException( "Can't update a potential duplicate that is already "
                 + DeduplicationStatus.MERGED.name() );
     }
 
@@ -196,7 +196,7 @@ public class DeduplicationController
             .noneMatch( ds -> ds.name().equals( status.toUpperCase() ) ) )
         {
             throw new BadRequestException(
-                "Bad Request. Valid deduplication status are : " + Arrays.stream( DeduplicationStatus.values() )
+                "Valid deduplication status are : " + Arrays.stream( DeduplicationStatus.values() )
                     .map( Object::toString ).collect( Collectors.joining( "," ) ) );
         }
     }
