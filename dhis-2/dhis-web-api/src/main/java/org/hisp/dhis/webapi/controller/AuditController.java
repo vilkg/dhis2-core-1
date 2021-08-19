@@ -28,6 +28,9 @@
 package org.hisp.dhis.webapi.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.hisp.dhis.dxf2.webmessage.WebMessageUtils.conflict;
+import static org.hisp.dhis.dxf2.webmessage.WebMessageUtils.error;
+import static org.hisp.dhis.dxf2.webmessage.WebMessageUtils.notFound;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,9 +56,7 @@ import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataset.DataSet;
 import org.hisp.dhis.datavalue.DataValueAudit;
 import org.hisp.dhis.datavalue.DataValueAuditService;
-import org.hisp.dhis.dxf2.webmessage.WebMessage;
 import org.hisp.dhis.dxf2.webmessage.WebMessageException;
-import org.hisp.dhis.dxf2.webmessage.WebMessageUtils;
 import org.hisp.dhis.dxf2.webmessage.responses.FileResourceWebMessageResponse;
 import org.hisp.dhis.fieldfilter.FieldFilterParams;
 import org.hisp.dhis.fieldfilter.FieldFilterService;
@@ -173,7 +174,7 @@ public class AuditController
 
         if ( fileResource == null || fileResource.getDomain() != FileResourceDomain.DATA_VALUE )
         {
-            throw new WebMessageException( WebMessageUtils.notFound( "No file found with uid '" + uid + "'" ) );
+            throw new WebMessageException( notFound( "No file found with uid '" + uid + "'" ) );
         }
 
         FileResourceStorageStatus storageStatus = fileResource.getStorageStatus();
@@ -181,12 +182,10 @@ public class AuditController
         if ( storageStatus != FileResourceStorageStatus.STORED )
         {
             // HTTP 409, for lack of a more suitable status code
-            WebMessage webMessage = WebMessageUtils.conflict(
+            throw new WebMessageException( conflict(
                 "The content is being processed and is not available yet. Try again later.",
-                "The content requested is in transit to the file store and will be available at a later time." );
-            webMessage.setResponse( new FileResourceWebMessageResponse( fileResource ) );
-
-            throw new WebMessageException( webMessage );
+                "The content requested is in transit to the file store and will be available at a later time." )
+                    .setResponse( new FileResourceWebMessageResponse( fileResource ) ) );
         }
 
         response.setContentType( fileResource.getContentType() );
@@ -199,7 +198,7 @@ public class AuditController
         }
         catch ( IOException e )
         {
-            throw new WebMessageException( WebMessageUtils.error( "Failed fetching the file from storage",
+            throw new WebMessageException( error( "Failed fetching the file from storage",
                 "There was an exception when trying to fetch the file from the storage backend, could be network or filesystem related" ) );
         }
     }
@@ -575,7 +574,7 @@ public class AuditController
         if ( trackedEntityInstance == null )
         {
             throw new WebMessageException(
-                WebMessageUtils.conflict( "Illegal trackedEntityInstance identifier: " + tei ) );
+                conflict( "Illegal trackedEntityInstance identifier: " + tei ) );
         }
 
         return trackedEntityInstance;
@@ -612,7 +611,7 @@ public class AuditController
         if ( trackedEntityAttribute == null )
         {
             throw new WebMessageException(
-                WebMessageUtils.conflict( "Illegal trackedEntityAttribute identifier: " + tea ) );
+                conflict( "Illegal trackedEntityAttribute identifier: " + tea ) );
         }
 
         return trackedEntityAttribute;
@@ -649,7 +648,7 @@ public class AuditController
         if ( programStageInstance == null )
         {
             throw new WebMessageException(
-                WebMessageUtils.conflict( "Illegal programStageInstance identifier: " + ps ) );
+                conflict( "Illegal programStageInstance identifier: " + ps ) );
         }
 
         return programStageInstance;
@@ -666,7 +665,7 @@ public class AuditController
 
             if ( dataSet == null )
             {
-                throw new WebMessageException( WebMessageUtils.conflict( "Illegal dataSet identifier: " + ds ) );
+                throw new WebMessageException( conflict( "Illegal dataSet identifier: " + ds ) );
             }
 
             dataElements.addAll( dataSet.getDataElements() );
@@ -705,7 +704,7 @@ public class AuditController
 
         if ( dataElement == null )
         {
-            throw new WebMessageException( WebMessageUtils.conflict( "Illegal dataElement identifier: " + de ) );
+            throw new WebMessageException( conflict( "Illegal dataElement identifier: " + de ) );
         }
 
         return dataElement;
@@ -722,7 +721,7 @@ public class AuditController
 
             if ( period == null )
             {
-                throw new WebMessageException( WebMessageUtils.conflict( "Illegal period identifier: " + pe ) );
+                throw new WebMessageException( conflict( "Illegal period identifier: " + pe ) );
             }
             else
             {
@@ -766,7 +765,7 @@ public class AuditController
         if ( categoryOptionCombo == null )
         {
             throw new WebMessageException(
-                WebMessageUtils.conflict( "Illegal categoryOptionCombo identifier: " + co ) );
+                conflict( "Illegal categoryOptionCombo identifier: " + co ) );
         }
 
         return categoryOptionCombo;
@@ -785,7 +784,7 @@ public class AuditController
         if ( attributeOptionCombo == null )
         {
             throw new WebMessageException(
-                WebMessageUtils.conflict( "Illegal attributeOptionCombo identifier: " + cc ) );
+                conflict( "Illegal attributeOptionCombo identifier: " + cc ) );
         }
 
         return attributeOptionCombo;

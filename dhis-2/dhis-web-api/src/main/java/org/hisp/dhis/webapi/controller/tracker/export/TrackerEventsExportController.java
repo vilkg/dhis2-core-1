@@ -27,9 +27,11 @@
  */
 package org.hisp.dhis.webapi.controller.tracker.export;
 
+import static org.hisp.dhis.dxf2.webmessage.WebMessageUtils.notFound;
 import static org.hisp.dhis.webapi.controller.tracker.TrackerControllerSupport.RESOURCE_PATH;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -37,13 +39,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
 
+import org.hisp.dhis.commons.collection.CollectionUtils;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.dxf2.events.event.Event;
 import org.hisp.dhis.dxf2.events.event.EventSearchParams;
 import org.hisp.dhis.dxf2.events.event.EventService;
 import org.hisp.dhis.dxf2.events.event.Events;
 import org.hisp.dhis.dxf2.webmessage.WebMessageException;
-import org.hisp.dhis.dxf2.webmessage.WebMessageUtils;
 import org.hisp.dhis.node.Preset;
 import org.hisp.dhis.program.ProgramStageInstanceService;
 import org.hisp.dhis.schema.SchemaService;
@@ -98,6 +100,11 @@ public class TrackerEventsExportController
 
         EventSearchParams eventSearchParams = requestToSearchParamsMapper.map( eventCriteria );
 
+        if ( areAllEnrollmentsInvalid( eventCriteria, eventSearchParams ) )
+        {
+            return new PagingWrapper<org.hisp.dhis.tracker.domain.Event>().withInstances( Collections.emptyList() );
+        }
+
         Events events = eventService.getEvents( eventSearchParams );
 
         if ( hasHref( fields, eventCriteria.getSkipEventId() ) )
@@ -115,6 +122,12 @@ public class TrackerEventsExportController
 
         return eventPagingWrapper.withInstances( EVENTS_MAPPER.fromCollection( events.getEvents() ) );
 
+    }
+
+    private boolean areAllEnrollmentsInvalid( TrackerEventCriteria eventCriteria, EventSearchParams eventSearchParams )
+    {
+        return !CollectionUtils.isEmpty( eventCriteria.getEnrollments() ) &&
+            CollectionUtils.isEmpty( eventSearchParams.getProgramInstances() );
     }
 
     private String getUri( String eventUid, HttpServletRequest request )
@@ -155,7 +168,7 @@ public class TrackerEventsExportController
 
         if ( event == null )
         {
-            throw new WebMessageException( WebMessageUtils.notFound( "Event not found for ID " + uid ) );
+            throw new WebMessageException( notFound( "Event not found for ID " + uid ) );
         }
 
         event.setHref( getUri( uid, request ) );
