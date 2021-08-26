@@ -48,7 +48,6 @@ import org.cache2k.integration.CacheLoader;
 import org.hisp.dhis.category.CategoryCombo;
 import org.hisp.dhis.common.IdScheme;
 import org.hisp.dhis.common.IdSchemes;
-import org.hisp.dhis.commons.util.SystemUtils;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dxf2.common.ImportOptions;
 import org.hisp.dhis.dxf2.events.event.Event;
@@ -176,7 +175,7 @@ public class ProgramSupplier extends AbstractSupplier<Map<String, Program>>
         //
         // do not use cache is `skipCache` is true or if running as test
         //
-        if ( importOptions.isSkipCache() || SystemUtils.isTestRun( env.getActiveProfiles() ) )
+        if ( importOptions.isSkipCache() )
         {
             programsCache.removeAll();
             userGroupCache.removeAll();

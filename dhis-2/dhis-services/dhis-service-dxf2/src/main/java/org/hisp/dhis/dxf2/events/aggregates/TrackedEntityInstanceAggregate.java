@@ -49,7 +49,6 @@ import org.cache2k.Cache;
 import org.cache2k.Cache2kBuilder;
 import org.cache2k.integration.CacheLoader;
 import org.hisp.dhis.common.BaseIdentifiableObject;
-import org.hisp.dhis.commons.util.SystemUtils;
 import org.hisp.dhis.dxf2.events.TrackedEntityInstanceParams;
 import org.hisp.dhis.dxf2.events.enrollment.Enrollment;
 import org.hisp.dhis.dxf2.events.trackedentity.Attribute;
@@ -361,6 +360,6 @@ public class TrackedEntityInstanceAggregate
      */
     private String getCacheKey( String key )
     {
-        return SystemUtils.isTestRun( env.getActiveProfiles() ) ? RandomStringUtils.randomAlphabetic( 10 ) : key;
+        return key;
     }
 }

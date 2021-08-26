@@ -93,7 +93,6 @@ import org.hisp.dhis.common.QueryOperator;
 import org.hisp.dhis.common.ValueType;
 import org.hisp.dhis.commons.collection.CachingMap;
 import org.hisp.dhis.commons.util.SqlHelper;
-import org.hisp.dhis.commons.util.SystemUtils;
 import org.hisp.dhis.commons.util.TextUtils;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dxf2.events.enrollment.EnrollmentStatus;
@@ -1672,7 +1671,7 @@ public class JdbcEventStore implements EventStore
      */
     private String getUpdateTeiSql()
     {
-        return String.format( UPDATE_TEI_SQL, SystemUtils.isTestRun( env.getActiveProfiles() ) ? "" : "SKIP LOCKED" );
+        return String.format( UPDATE_TEI_SQL, "SKIP LOCKED" );
     }
 
     private void bindEventParamsForInsert( PreparedStatement ps, ProgramStageInstance event )
