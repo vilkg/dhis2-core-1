@@ -180,6 +180,24 @@ public abstract class AbstractJdbcTableManager
     }
 
     @Override
+    public void createMaterializedViews( List<AnalyticsTable> tables )
+    {
+        // Set<String> existingTables = getExistingDatabaseTables();
+        //
+        // tables.forEach( table -> {
+        // if( existingTables.contains( table.getTableName() ) )
+        // {
+        // table.getProgram().getDataElements().stream()
+        // .filter( de -> de.getValueType() == ValueType.DATE )
+        // .map( de ->
+        // de.getUid() + ":" + de.getValueType() + ":" +
+        // de.getName()).collect(Collectors.joining(", ")));
+        // }
+        // });
+
+    }
+
+    @Override
     public void createTable( AnalyticsTable table )
     {
         if ( tableTypeIsPartitioned() )
@@ -191,6 +209,20 @@ public abstract class AbstractJdbcTableManager
             createNonPartitionedAnalyticsTable( table );
         }
     }
+
+    // @Override
+    // public void createMaterializedView( AnalyticsTable table, String postfix
+    // )
+    // {
+    // if ( tableTypeIsPartitioned() )
+    // {
+    // createPartitionTableWithPartitions( table );
+    // }
+    // else
+    // {
+    // createNonPartitionedAnalyticsTable( table );
+    // }
+    // }
 
     @Override
     @Async

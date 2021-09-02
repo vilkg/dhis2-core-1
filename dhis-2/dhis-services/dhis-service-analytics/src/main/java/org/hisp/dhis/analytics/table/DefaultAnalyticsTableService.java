@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,6 +49,7 @@ import org.hisp.dhis.analytics.AnalyticsTableService;
 import org.hisp.dhis.analytics.AnalyticsTableType;
 import org.hisp.dhis.analytics.AnalyticsTableUpdateParams;
 import org.hisp.dhis.common.IdentifiableObjectUtils;
+import org.hisp.dhis.common.ValueType;
 import org.hisp.dhis.commons.util.ConcurrentUtils;
 import org.hisp.dhis.commons.util.SystemUtils;
 import org.hisp.dhis.dataelement.DataElementService;
@@ -206,6 +208,55 @@ public class DefaultAnalyticsTableService
 
         clock.logTime( "Table update done: " + tableType.getTableName() );
         notifier.notify( jobId, "Table update done" );
+
+        if ( tableType == AnalyticsTableType.EVENT )
+        {
+            notifier.notify( jobId, "Creating materialized views (EVENT)" );
+            createEventMaterializedViews( jobId, tables );
+            clock.logTime( "Materialized views created (EVENT)" );
+            notifier.notify( jobId, "Materialized views created (EVENT)" );
+
+        }
+
+    }
+
+    private void createEventMaterializedViews( JobConfiguration jobId, List<AnalyticsTable> tables )
+    {
+        Set<String> existingTables = tableManager.getExistingDatabaseTables();
+
+        tables.forEach( table -> {
+            if ( existingTables.contains( table.getTableName() ) )
+            {
+                table.getProgram().getDataElements().stream()
+                    .filter( de -> de.getValueType() == ValueType.DATE )
+                    .map( de -> {
+                        return "SELECT first_value(" + table.getTableName() +
+                            ".\"PFXeJV8d7ja\") OVER (PARTITION BY analytics_event_uyjxktbwrnf.pi, analytics_event_uyjxktbwrnf.ps ORDER BY analytics_event_uyjxktbwrnf.executiondate DESC RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS latest,\n"
+                            +
+                            "    analytics_event_uyjxktbwrnf.pi,\n" +
+                            "    analytics_event_uyjxktbwrnf.ps\n" +
+                            "   FROM analytics_event_uyjxktbwrnf\n" +
+                            "  WHERE analytics_event_uyjxktbwrnf.\"PFXeJV8d7ja\" IS NOT NULL\n" +
+                            "  ORDER BY analytics_event_uyjxktbwrnf.executiondate DESC";
+                    } )
+                    .collect( Collectors.joining( ", " ) );
+                String sql = "SELECT first_value(" + table.getTableName() +
+                    ".\"PFXeJV8d7ja\") OVER (PARTITION BY analytics_event_uyjxktbwrnf.pi, analytics_event_uyjxktbwrnf.ps ORDER BY analytics_event_uyjxktbwrnf.executiondate DESC RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS latest,\n"
+                    +
+                    "    analytics_event_uyjxktbwrnf.pi,\n" +
+                    "    analytics_event_uyjxktbwrnf.ps\n" +
+                    "   FROM analytics_event_uyjxktbwrnf\n" +
+                    "  WHERE analytics_event_uyjxktbwrnf.\"PFXeJV8d7ja\" IS NOT NULL\n" +
+                    "  ORDER BY analytics_event_uyjxktbwrnf.executiondate DESC";
+
+                notifier.notify( jobId, table.getTableName() );
+
+                notifier.notify( jobId, table.getProgram().getDataElements().stream()
+                    .filter( de -> de.getValueType() == ValueType.DATE )
+                    .map( de -> de.getUid() + ":" + de.getValueType() + ":" + de.getName() )
+                    .collect( Collectors.joining( ", " ) ) );
+            }
+        } );
     }
 
     @Override

@@ -81,6 +81,8 @@ public interface AnalyticsTableManager
      */
     void preCreateTables( AnalyticsTableUpdateParams params );
 
+    public void createMaterializedViews( List<AnalyticsTable> tables );
+
     /**
      * Removes updated and deleted data from tables for "latest" partition
      * update.
