@@ -109,7 +109,7 @@ public class PotentialDuplicatesRelationshipTests
             new JsonObjectBuilder().addArray( "relationships", Arrays.asList( relationship ) ).build() )
             .validate().statusCode( 200 );
 
-        trackerActions.getTrackedEntity( teiA )
+        trackerActions.getTrackedEntity( teiA + "?fields=*" )
             .validate()
             .statusCode( 200 )
             .body( "relationships", hasSize( 1 ) )
