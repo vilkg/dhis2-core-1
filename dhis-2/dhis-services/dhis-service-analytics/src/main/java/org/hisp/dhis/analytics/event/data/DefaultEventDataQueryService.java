@@ -46,6 +46,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hisp.dhis.analytics.AnalyticsAggregationType;
 import org.hisp.dhis.analytics.DataQueryService;
 import org.hisp.dhis.analytics.EventOutputType;
+import org.hisp.dhis.analytics.TableStyleType;
 import org.hisp.dhis.analytics.event.EventDataQueryService;
 import org.hisp.dhis.analytics.event.EventQueryParams;
 import org.hisp.dhis.analytics.event.QueryItemLocator;
@@ -249,6 +250,7 @@ public class DefaultEventDataQueryService
             .withSortOrder( request.getSortOrder() )
             .withLimit( request.getLimit() )
             .withOutputType( MoreObjects.firstNonNull( request.getOutputType(), EventOutputType.EVENT ) )
+            .withTableStyleType( MoreObjects.firstNonNull( request.getTableStyleType(), TableStyleType.NONE ) )
             .withCollapseDataDimensions( request.isCollapseDataDimensions() )
             .withAggregateData( request.isAggregateData() )
             .withProgram( pr )

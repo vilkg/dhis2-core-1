@@ -50,6 +50,7 @@ import org.hisp.dhis.analytics.Partitions;
 import org.hisp.dhis.analytics.QueryKey;
 import org.hisp.dhis.analytics.QueryParamsBuilder;
 import org.hisp.dhis.analytics.SortOrder;
+import org.hisp.dhis.analytics.TableStyleType;
 import org.hisp.dhis.analytics.TimeField;
 import org.hisp.dhis.common.*;
 import org.hisp.dhis.commons.collection.ListUtils;
@@ -168,6 +169,12 @@ public class EventQueryParams
      * tracked entity instance.
      */
     private EventOutputType outputType;
+
+    /**
+     * Indicates the table style type which can be by event, enrollment type or
+     * none.
+     */
+    private TableStyleType tableStyleType;
 
     /**
      * Indicates the event status.
@@ -292,6 +299,7 @@ public class EventQueryParams
         params.sortOrder = this.sortOrder;
         params.limit = this.limit;
         params.outputType = this.outputType;
+        params.tableStyleType = this.tableStyleType;
         params.eventStatus = this.eventStatus;
         params.collapseDataDimensions = this.collapseDataDimensions;
         params.coordinatesOnly = this.coordinatesOnly;
@@ -400,6 +408,7 @@ public class EventQueryParams
             .addIgnoreNull( "sortOrder", sortOrder )
             .addIgnoreNull( "limit", limit )
             .addIgnoreNull( "outputType", outputType )
+            .addIgnoreNull( "tableStyleType", tableStyleType )
             .addIgnoreNull( "eventStatus", eventStatus )
             .addIgnoreNull( "collapseDataDimensions", collapseDataDimensions )
             .addIgnoreNull( "coordinatesOnly", coordinatesOnly )
@@ -949,6 +958,11 @@ public class EventQueryParams
         return outputType;
     }
 
+    public TableStyleType getTableStyleType()
+    {
+        return tableStyleType;
+    }
+
     public EventStatus getEventStatus()
     {
         return eventStatus;
@@ -1279,6 +1293,12 @@ public class EventQueryParams
         public Builder withOutputType( EventOutputType outputType )
         {
             this.params.outputType = outputType;
+            return this;
+        }
+
+        public Builder withTableStyleType( TableStyleType tableStyleType )
+        {
+            this.params.tableStyleType = tableStyleType;
             return this;
         }
 

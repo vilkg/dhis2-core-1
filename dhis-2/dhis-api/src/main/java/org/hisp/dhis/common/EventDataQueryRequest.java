@@ -38,6 +38,7 @@ import lombok.Getter;
 import org.hisp.dhis.analytics.AggregationType;
 import org.hisp.dhis.analytics.EventOutputType;
 import org.hisp.dhis.analytics.SortOrder;
+import org.hisp.dhis.analytics.TableStyleType;
 import org.hisp.dhis.event.EventStatus;
 import org.hisp.dhis.program.ProgramStatus;
 
@@ -79,6 +80,8 @@ public class EventDataQueryRequest
     private Integer limit;
 
     private EventOutputType outputType;
+
+    private TableStyleType tableStyleType;
 
     private EventStatus eventStatus;
 
@@ -152,6 +155,7 @@ public class EventDataQueryRequest
         queryRequest.sortOrder = this.sortOrder;
         queryRequest.limit = this.limit;
         queryRequest.outputType = this.outputType;
+        queryRequest.tableStyleType = this.tableStyleType;
         queryRequest.eventStatus = this.eventStatus;
         queryRequest.programStatus = this.programStatus;
         queryRequest.collapseDataDimensions = this.collapseDataDimensions;
@@ -206,6 +210,7 @@ public class EventDataQueryRequest
                 .limit( criteria.getLimit() )
                 .ouMode( criteria.getOuMode() )
                 .outputType( criteria.getOutputType() )
+                .tableStyleType( criteria.getTableStyleType() )
                 .page( criteria.getPage() )
                 .pageSize( criteria.getPageSize() )
                 .paging( criteria.isPaging() )

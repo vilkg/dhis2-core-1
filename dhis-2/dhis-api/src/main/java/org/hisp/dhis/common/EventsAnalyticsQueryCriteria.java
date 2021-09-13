@@ -36,6 +36,7 @@ import lombok.NoArgsConstructor;
 import org.hisp.dhis.analytics.AggregationType;
 import org.hisp.dhis.analytics.EventOutputType;
 import org.hisp.dhis.analytics.SortOrder;
+import org.hisp.dhis.analytics.TableStyleType;
 import org.hisp.dhis.event.EventStatus;
 import org.hisp.dhis.program.ProgramStatus;
 
@@ -171,6 +172,14 @@ public class EventsAnalyticsQueryCriteria
      * (options: EVENT | ENROLLMENT | TRACKED_ENTITY_INSTANCE )
      */
     private EventOutputType outputType = EventOutputType.EVENT;
+
+    /**
+     * Specify table style type for analytical data which can be events,
+     * enrollments or none.
+     *
+     * (options: EVENT | ENROLLMENT | TRACKED_ENTITY_INSTANCE )
+     */
+    private TableStyleType tableStyleType = TableStyleType.NONE;
 
     /**
      * Whether to collapse all data dimensions (data elements and attributes)

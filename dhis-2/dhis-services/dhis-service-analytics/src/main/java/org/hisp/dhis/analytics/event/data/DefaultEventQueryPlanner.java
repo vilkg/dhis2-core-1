@@ -39,6 +39,7 @@ import org.hisp.dhis.analytics.EventOutputType;
 import org.hisp.dhis.analytics.Partitions;
 import org.hisp.dhis.analytics.QueryPlanner;
 import org.hisp.dhis.analytics.QueryValidator;
+import org.hisp.dhis.analytics.TableStyleType;
 import org.hisp.dhis.analytics.data.QueryPlannerUtils;
 import org.hisp.dhis.analytics.event.EventQueryParams;
 import org.hisp.dhis.analytics.event.EventQueryPlanner;
@@ -144,9 +145,11 @@ public class DefaultEventQueryPlanner
             : PartitionUtils.getPartitions( params.getAllPeriods() );
 
         String baseName = params.hasEnrollmentProgramIndicatorDimension()
-            || params.getOutputType() == EventOutputType.ENROLLMENT
-                ? AnalyticsTableType.ENROLLMENT.getTableName()
-                : AnalyticsTableType.EVENT.getTableName();
+            || (params.getOutputType() == EventOutputType.ENROLLMENT &&
+                (params.getTableStyleType() == TableStyleType.PIVOT
+                    || params.getTableStyleType() == TableStyleType.LINELIST))
+                        ? AnalyticsTableType.ENROLLMENT.getTableName()
+                        : AnalyticsTableType.EVENT.getTableName();
 
         String tableName = PartitionUtils.getTableName( baseName, params.getProgram() );
 
