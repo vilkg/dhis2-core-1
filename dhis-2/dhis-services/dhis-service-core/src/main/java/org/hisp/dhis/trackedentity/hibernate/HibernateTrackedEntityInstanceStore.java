@@ -779,25 +779,31 @@ public class HibernateTrackedEntityInstanceStore
                 .append( ") " );
         }
 
-        if ( params.hasLastUpdatedDuration() )
+        // If we have a where condition on program, we'll check lastupdated
+        // later on program in OR condition, same as here but enrollments and
+        // event check
+        if ( !params.hasProgram() )
         {
-            trackedEntity.append( whereAnd.whereAnd() )
-                .append( " TEI.lastupdated >= '" )
-                .append( getLongGmtDateString( DateUtils.nowMinusDuration( params.getLastUpdatedDuration() ) ) )
-                .append( SINGLE_QUOTE );
-        }
-        else
-        {
-            if ( params.hasLastUpdatedStartDate() )
+            if ( params.hasLastUpdatedDuration() )
             {
-                trackedEntity.append( whereAnd.whereAnd() ).append( " TEI.lastupdated >= '" )
-                    .append( getMediumDateString( params.getLastUpdatedStartDate() ) ).append( SINGLE_QUOTE );
-            }
-            if ( params.hasLastUpdatedEndDate() )
-            {
-                trackedEntity.append( whereAnd.whereAnd() ).append( " TEI.lastupdated < '" )
-                    .append( getMediumDateString( getDateAfterAddition( params.getLastUpdatedEndDate(), 1 ) ) )
+                trackedEntity.append( whereAnd.whereAnd() )
+                    .append( " TEI.lastupdated >= '" )
+                    .append( getLongGmtDateString( DateUtils.nowMinusDuration( params.getLastUpdatedDuration() ) ) )
                     .append( SINGLE_QUOTE );
+            }
+            else
+            {
+                if ( params.hasLastUpdatedStartDate() )
+                {
+                    trackedEntity.append( whereAnd.whereAnd() ).append( " TEI.lastupdated >= '" )
+                        .append( getMediumDateString( params.getLastUpdatedStartDate() ) ).append( SINGLE_QUOTE );
+                }
+                if ( params.hasLastUpdatedEndDate() )
+                {
+                    trackedEntity.append( whereAnd.whereAnd() ).append( " TEI.lastupdated < '" )
+                        .append( getMediumDateString( getDateAfterAddition( params.getLastUpdatedEndDate(), 1 ) ) )
+                        .append( SINGLE_QUOTE );
+                }
             }
         }
 
@@ -1740,6 +1746,18 @@ public class HibernateTrackedEntityInstanceStore
 
         getQuery( hql )
             .setParameter( "lastSynchronized", lastSynchronized )
+            .setParameter( "trackedEntityInstances", trackedEntityInstanceUIDs )
+            .executeUpdate();
+    }
+
+    @Override
+    public void updateTrackedEntityInstancesLastUpdated( List<String> trackedEntityInstanceUIDs,
+        Date lastUpdated )
+    {
+        final String hql = "update TrackedEntityInstance set lastUpdated = :lastUpdated WHERE uid in :trackedEntityInstances";
+
+        getQuery( hql )
+            .setParameter( "lastUpdated", lastUpdated )
             .setParameter( "trackedEntityInstances", trackedEntityInstanceUIDs )
             .executeUpdate();
     }
