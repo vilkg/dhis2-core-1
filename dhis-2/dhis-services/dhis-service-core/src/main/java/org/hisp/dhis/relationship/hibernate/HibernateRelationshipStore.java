@@ -180,11 +180,11 @@ public class HibernateRelationshipStore
     {
         List<Object> c = getSession()
             .createNativeQuery( new StringBuilder()
-                .append( "SELECT R.uid" )
-                .append( "FROM relationship R" )
-                .append( "INNER JOIN relationshiptype RT ON RT.relationshiptypeid = R.relationshiptypeid" )
-                .append( "WHERE R.key IN (:keys)" )
-                .append( "OR (R.inverted_key IN (:keys) AND RT.bidirectional = TRUE)" )
+                .append( "SELECT R.uid " )
+                .append( "FROM relationship R " )
+                .append( "INNER JOIN relationshiptype RT ON RT.relationshiptypeid = R.relationshiptypeid " )
+                .append( "WHERE R.key IN (:keys) " )
+                .append( "OR (R.inverted_key IN (:keys) AND RT.bidirectional = TRUE) " )
                 .toString() )
             .setParameter( "keys", relationshipKeyList )
             .getResultList();
