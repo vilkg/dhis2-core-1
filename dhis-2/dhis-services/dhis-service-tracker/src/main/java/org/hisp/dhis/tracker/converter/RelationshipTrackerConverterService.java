@@ -42,6 +42,7 @@ import org.hisp.dhis.tracker.domain.Relationship;
 import org.hisp.dhis.tracker.domain.RelationshipItem;
 import org.hisp.dhis.tracker.preheat.TrackerPreheat;
 import org.hisp.dhis.util.DateUtils;
+import org.hisp.dhis.util.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -177,6 +178,19 @@ public class RelationshipTrackerConverterService
 
         toRelationship.setFrom( fromItem );
         toRelationship.setTo( toItem );
+        toRelationship.setKey( fromRelationship.getRelationshipType() + "_" +
+            ObjectUtils.firstNonNull( fromRelationship.getFrom().getTrackedEntity(),
+                fromRelationship.getFrom().getEnrollment(), fromRelationship.getFrom().getEvent() )
+            + "_" +
+            ObjectUtils.firstNonNull( fromRelationship.getTo().getTrackedEntity(),
+                fromRelationship.getTo().getEnrollment(), fromRelationship.getTo().getEvent() ) );
+
+        toRelationship.setInvertedKey( fromRelationship.getRelationshipType() + "_" +
+            ObjectUtils.firstNonNull( fromRelationship.getTo().getTrackedEntity(),
+                fromRelationship.getTo().getEnrollment(), fromRelationship.getTo().getEvent() )
+            + "_" +
+            ObjectUtils.firstNonNull( fromRelationship.getFrom().getTrackedEntity(),
+                fromRelationship.getFrom().getEnrollment(), fromRelationship.getFrom().getEvent() ) );
 
         return toRelationship;
     }
