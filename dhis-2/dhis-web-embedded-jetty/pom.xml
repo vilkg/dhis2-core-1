@@ -18,7 +18,7 @@
         <mainClass>org.hisp.dhis.web.embeddedjetty.JettyEmbeddedCoreWeb</mainClass>
         <jib-maven-plugin.version>3.0.0</jib-maven-plugin.version>
         <jib-maven-plugin.from-image>tons/dhis2-base</jib-maven-plugin.from-image>
-        <jib-maven-plugin.to-image>dhis2/core-dev</jib-maven-plugin.to-image>
+        <jib-maven-plugin.to-image>dhis2/core</jib-maven-plugin.to-image>
     </properties>
 
     <build>
