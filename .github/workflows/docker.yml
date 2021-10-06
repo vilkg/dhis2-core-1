@@ -5,6 +5,7 @@ on:
     branches: [ feature/jib ]
   pull_request:
     branches: [ feature/jib ]
+  workflow_dispatch:
 
 jobs:
   build:
