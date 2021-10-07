@@ -1,3 +1,6 @@
+ARG BASE_IMAGE
+FROM $BASE_IMAGE as serve
+
 ARG TOMCAT_IMAGE
 FROM $TOMCAT_IMAGE
 
@@ -30,7 +33,10 @@ RUN chmod +rx /usr/local/bin/docker-entrypoint.sh && \
     chmod +rx /usr/local/bin/wait-for-it.sh
 
 COPY ./shared/server.xml /usr/local/tomcat/conf
-COPY ./artifacts/dhis.war /usr/local/tomcat/webapps/ROOT.war
+
+COPY --from=serve /srv/dhis2/dhis.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=serve /srv/dhis2/sha256sum.txt /usr/local/tomcat/webapps/sha256sum.txt
+COPY --from=serve /srv/dhis2/md5sum.txt /usr/local/tomcat/webapps/md5sum.txt
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 

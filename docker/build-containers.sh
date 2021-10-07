@@ -85,8 +85,10 @@ build () {
     local TYPE=$3
 
     docker build \
+        --network=private \
         --tag "${TAG}" \
         --file "${DIR}/tomcat-${TYPE}/Dockerfile" \
+        --build-arg BASE_IMAGE="${CORE_IMAGE}" \
         --build-arg TOMCAT_IMAGE="${TOMCAT_IMAGE}:${TC_TAG}" \
         --build-arg IDENTIFIER="${IDENTIFIER}" \
         "$DIR"
