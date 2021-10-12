@@ -524,9 +524,9 @@ public abstract class AbstractJdbcTableManager
         List<AnalyticsTableColumn> dimensionColumns, List<AnalyticsTableColumn> valueColumns )
     {
         Date lastFullTableUpdate = (Date) systemSettingManager
-            .getSystemSetting( SettingKey.LAST_SUCCESSFUL_ANALYTICS_TABLES_UPDATE );
+            .getSystemSetting( SettingKey.LAST_SUCCESSFUL_ANALYTICS_TABLES_UPDATE, Date.class );
         Date lastLatestPartitionUpdate = (Date) systemSettingManager
-            .getSystemSetting( SettingKey.LAST_SUCCESSFUL_LATEST_ANALYTICS_PARTITION_UPDATE );
+            .getSystemSetting( SettingKey.LAST_SUCCESSFUL_LATEST_ANALYTICS_PARTITION_UPDATE, Date.class );
         Date lastAnyTableUpdate = DateUtils.getLatest( lastLatestPartitionUpdate, lastFullTableUpdate );
 
         Assert.notNull( lastFullTableUpdate,
@@ -587,7 +587,7 @@ public abstract class AbstractJdbcTableManager
     protected List<AnalyticsTableColumn> filterDimensionColumns( List<AnalyticsTableColumn> columns )
     {
         Date lastResourceTableUpdate = (Date) systemSettingManager
-            .getSystemSetting( SettingKey.LAST_SUCCESSFUL_RESOURCE_TABLES_UPDATE );
+            .getSystemSetting( SettingKey.LAST_SUCCESSFUL_RESOURCE_TABLES_UPDATE, Date.class );
 
         if ( lastResourceTableUpdate == null )
         {
