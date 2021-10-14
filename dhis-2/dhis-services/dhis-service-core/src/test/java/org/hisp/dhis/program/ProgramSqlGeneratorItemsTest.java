@@ -174,8 +174,6 @@ public class ProgramSqlGeneratorItemsTest
     @Test
     public void testDataElementNotFound()
     {
-        when( attributeService.getTrackedEntityAttribute( attributeA.getUid() ) ).thenReturn( attributeA );
-        when( constantService.getConstant( constantA.getUid() ) ).thenReturn( constantA );
         when( programStageService.getProgramStage( programStageA.getUid() ) ).thenReturn( programStageA );
 
         assertThrows( org.hisp.dhis.antlr.ParserException.class, () -> test( "#{ProgrmStagA.NotElementA}" ) );
