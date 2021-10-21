@@ -27,20 +27,29 @@
  */
 package org.hisp.dhis.tracker.bundle.persister;
 
+import static com.google.api.client.util.Preconditions.checkNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import org.hisp.dhis.common.AuditType;
 import org.hisp.dhis.common.BaseIdentifiableObject;
+import org.hisp.dhis.common.ValueType;
 import org.hisp.dhis.fileresource.FileResource;
 import org.hisp.dhis.reservedvalue.ReservedValueService;
+import org.hisp.dhis.trackedentity.TrackedEntityAttribute;
 import org.hisp.dhis.trackedentity.TrackedEntityInstance;
 import org.hisp.dhis.trackedentityattributevalue.TrackedEntityAttributeValue;
 import org.hisp.dhis.trackedentityattributevalue.TrackedEntityAttributeValueAudit;
@@ -332,82 +341,109 @@ public abstract class AbstractTrackerPersister<T extends TrackerDto, V extends B
             return;
         }
 
-        TrackedEntityAttributeValueContext trackedEntityAttributeValueContext = new TrackedEntityAttributeValueContext(
-            session, preheat, trackedEntityInstance );
+        Map<String, TrackedEntityAttributeValue> attributeValueByUid = trackedEntityInstance
+            .getTrackedEntityAttributeValues()
+            .stream()
+            .collect( Collectors.toMap( teav -> teav.getAttribute().getUid(), Function.identity() ) );
 
-        payloadAttributes.stream()
-            .map( trackedEntityAttributeValueContext::withAttributeFromPayload )
-            .forEach( this::handleTrackedEntityAttributeValue );
+        for ( Attribute attribute : payloadAttributes )
+        {
+            if ( isDelete( attribute ) && isNewAttribute( attributeValueByUid, attribute.getAttribute() ) )
+            {
+                return;
+            }
+
+            TrackedEntityAttributeValue trackedEntityAttributeValue = Optional
+                .ofNullable( attributeValueByUid.get( attribute.getAttribute() ) )
+                .orElseGet( () -> new TrackedEntityAttributeValue()
+                    .setAttribute( getTrackedEntityAttributeFromPreheat( preheat, attribute.getAttribute() ) )
+                    .setEntityInstance( trackedEntityInstance ) );
+
+            trackedEntityAttributeValue.setStoredBy( attribute.getStoredBy() );
+            trackedEntityAttributeValue.setValue( attribute.getValue() );
+
+            if ( isDelete( attribute ) )
+            {
+                // TODO here we know the TrackedEntityAttributeValue exists I
+                // assume,
+                // Can we be certain that TrackedEntityAttributeValue is from
+                // the 'ofNullable' piece above?
+                // So from attributeValueByUid.get( attribute.getAttribute()
+                // In that case we can get the attribute uid from
+                // trackedEntityAttributeValue.getAttribute().getUid()
+                // and remove TWO parameters :)
+                // and turn it into
+                // delete( session, preheat, trackedEntityAttributeValue);
+                // instead of
+                delete( session, preheat, attributeValueByUid, attribute.getAttribute(), trackedEntityAttributeValue );
+            }
+            else
+            {
+                // TODO I am unsure if similar thoughts as with delete() above
+                // can help reduce the parameters of saveOrUpdate
+                saveOrUpdate( session, preheat, attributeValueByUid, attribute.getAttribute(), trackedEntityInstance,
+                    trackedEntityAttributeValue );
+            }
+
+            // IDEA This logic could be moved into the delete()/saveOrUpdate()
+            // but then delete would also need the TrackedEntityInstance as
+            // parameter
+            // if we are able to reduce the parameters of delete to 3, it might
+            // be ok again to do this as 4 parameters for a private method is
+            // ok'ish by me
+            AuditType auditType = isDelete( attribute ) ? AuditType.DELETE
+                : isNewAttribute( attributeValueByUid, attribute.getAttribute() ) ? AuditType.CREATE : AuditType.UPDATE;
+
+            logTrackedEntityAttributeValueHistory(
+                preheat.getUsername(),
+                trackedEntityAttributeValue,
+                trackedEntityInstance,
+                auditType );
+
+            handleReservedValue( trackedEntityAttributeValue );
+        }
     }
 
-    private void handleTrackedEntityAttributeValue( TrackedEntityAttributeValueContext ctx )
+    private static boolean isDelete( Attribute attribute )
     {
-        if ( ctx.isDelete() && ctx.isNewAttribute() )
-        {
-            return;
-        }
-
-        TrackedEntityAttributeValue trackedEntityAttributeValue = Optional
-            .ofNullable( ctx.getTrackedEntityAttributeValueFromMap() )
-            .orElseGet( () -> new TrackedEntityAttributeValue()
-                .setAttribute( ctx.getTrackedEntityAttributeFromPreheat() )
-                .setEntityInstance( ctx.getTrackedEntityInstance() ) );
-
-        trackedEntityAttributeValue.setStoredBy( ctx.getAttributeFromPayload().getStoredBy() );
-        trackedEntityAttributeValue.setValue( ctx.getAttributeFromPayload().getValue() );
-
-        if ( ctx.isDelete() )
-        {
-            delete( ctx, trackedEntityAttributeValue );
-        }
-        else
-        {
-            saveOrUpdate( ctx, trackedEntityAttributeValue );
-        }
-
-        AuditType auditType = ctx.isDelete() ? AuditType.DELETE
-            : ctx.isNewAttribute() ? AuditType.CREATE : AuditType.UPDATE;
-
-        logTrackedEntityAttributeValueHistory(
-            ctx.getTrackerPreheat().getUsername(),
-            trackedEntityAttributeValue,
-            ctx.getTrackedEntityInstance(),
-            auditType );
-
-        handleReservedValue( trackedEntityAttributeValue );
+        // We cannot get the value from attributeToStore because it uses
+        // encryption logic, so we need to use the one from payload
+        return StringUtils.isEmpty( attribute.getValue() );
     }
 
-    private void delete( TrackedEntityAttributeValueContext ctx,
+    private static boolean isNewAttribute( Map<String, TrackedEntityAttributeValue> attributeValueByUid,
+        String attributeUid )
+    {
+        return Objects.isNull( attributeValueByUid.get( attributeUid ) );
+    }
+
+    private static TrackedEntityAttribute getTrackedEntityAttributeFromPreheat( TrackerPreheat preheat,
+        String attributeUid )
+    {
+        TrackedEntityAttribute trackedEntityAttribute = preheat.get( TrackedEntityAttribute.class, attributeUid );
+
+        checkNotNull( trackedEntityAttribute,
+            "Attribute " + attributeUid
+                + " should never be NULL here if validation is enforced before commit." );
+
+        return trackedEntityAttribute;
+    }
+
+    private void delete( Session session, TrackerPreheat preheat,
+        Map<String, TrackedEntityAttributeValue> attributeValueByUid, String attributeUid,
         TrackedEntityAttributeValue trackedEntityAttributeValue )
     {
-        Session session = ctx.getSession();
-        if ( ctx.isFileResource() )
+        if ( isFileResource( preheat, attributeUid ) )
         {
-            unassignFileResource( session, ctx.getTrackerPreheat(),
-                ctx.getTrackedEntityAttributeValueFromMap().getValue() );
+            unassignFileResource( session, preheat, attributeValueByUid.get( attributeUid ).getValue() );
         }
 
         session.remove( trackedEntityAttributeValue );
     }
 
-    private void saveOrUpdate( TrackedEntityAttributeValueContext ctx,
-        TrackedEntityAttributeValue trackedEntityAttributeValue )
+    private static boolean isFileResource( TrackerPreheat preheat, String attributeUid )
     {
-        Session session = ctx.getSession();
-        if ( ctx.isFileResource() )
-        {
-            assignFileResource( session, ctx.getTrackerPreheat(),
-                trackedEntityAttributeValue.getValue() );
-        }
-
-        saveOrUpdate( session, ctx.isNewAttribute(), trackedEntityAttributeValue );
-
-        // In case it's a newly created attribute we'll add it back to TEI,
-        // so it can end up in preheat
-        if ( ctx.isNewAttribute() )
-        {
-            ctx.getTrackedEntityInstance().getTrackedEntityAttributeValues().add( trackedEntityAttributeValue );
-        }
+        return getTrackedEntityAttributeFromPreheat( preheat, attributeUid ).getValueType() == ValueType.FILE_RESOURCE;
     }
 
     private void handleReservedValue( TrackedEntityAttributeValue attributeValue )
@@ -433,15 +469,25 @@ public abstract class AbstractTrackerPersister<T extends TrackerDto, V extends B
         }
     }
 
-    private void saveOrUpdate( Session session, boolean isNew, Object persistable )
+    private void saveOrUpdate( Session session, TrackerPreheat preheat,
+        Map<String, TrackedEntityAttributeValue> attributeValueByUid, String attributeUid,
+        TrackedEntityInstance trackedEntityInstance, TrackedEntityAttributeValue trackedEntityAttributeValue )
     {
-        if ( isNew )
+        if ( isFileResource( preheat, attributeUid ) )
         {
-            session.persist( persistable );
+            assignFileResource( session, preheat, trackedEntityAttributeValue.getValue() );
+        }
+
+        if ( isNewAttribute( attributeValueByUid, attributeUid ) )
+        {
+            session.persist( trackedEntityAttributeValue );
+            // In case it's a newly created attribute we'll add it back to TEI,
+            // so it can end up in preheat
+            trackedEntityInstance.getTrackedEntityAttributeValues().add( trackedEntityAttributeValue );
         }
         else
         {
-            session.merge( persistable );
+            session.merge( trackedEntityAttributeValue );
         }
     }
 }
