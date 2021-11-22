@@ -230,7 +230,12 @@ public class EnrollmentsTests
     public void shouldImportEnrollmentToExistingTei()
         throws Exception
     {
-        String teiId = importTei();
+        JsonObject teiPayload = new FileReaderUtils()
+            .read( new File( "src/test/resources/tracker/importer/teis/tei.json" ) )
+            .get( JsonObject.class );
+
+        String teiId = trackerActions.postAndGetJobReport( teiPayload, new QueryParamsBuilder().add( "async", "false" ) ).validateSuccessfulImport().extractImportedTeis()
+            .get( 0 );
 
         JsonObject enrollmentPayload = new FileReaderUtils()
             .read( new File( "src/test/resources/tracker/importer/enrollments/enrollment.json" ) )

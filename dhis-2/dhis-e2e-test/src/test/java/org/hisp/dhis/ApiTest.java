@@ -28,6 +28,7 @@
 package org.hisp.dhis;
 
 import org.hisp.dhis.actions.LoginActions;
+import org.hisp.dhis.actions.MaintenanceActions;
 import org.hisp.dhis.helpers.TestCleanUp;
 import org.hisp.dhis.helpers.extensions.ConfigurationExtension;
 import org.hisp.dhis.helpers.extensions.MetadataSetupExtension;
@@ -48,5 +49,6 @@ public abstract class ApiTest
     {
         new LoginActions().loginAsDefaultUser();
         new TestCleanUp().deleteCreatedEntities();
+        new MaintenanceActions().post( "?cacheClear=true", new JsonObject()  );
     }
 }

@@ -144,6 +144,7 @@ public class UserAssignmentFilterTests
         loginActions.loginAsUser( userUsername, userPassword );
 
         String eventId = eventActions.get( "?orgUnit=" + orgUnit + "&assignedUserMode=CURRENT" )
+            .validateStatus( 200 )
             .extractString( "events.event[0]" );
 
         assertNotNull( eventId, "Event was not found" );
@@ -220,7 +221,7 @@ public class UserAssignmentFilterTests
 
     private ApiResponse unassignEvent( String eventId )
     {
-        JsonObject body = eventActions.get( eventId ).getBody();
+        JsonObject body = eventActions.get( eventId ).validateStatus( 200 ).getBody();
 
         body.addProperty( "assignedUser", "" );
 
