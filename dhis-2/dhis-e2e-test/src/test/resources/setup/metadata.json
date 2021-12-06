@@ -1,4 +1,42 @@
 {
+  "attributes": [
+    {
+      "id": "wLFJWAiOPZY",
+      "name": "UNIQUE_OU_ATTRIBUTE",
+      "code": "TA_OU_ATTRIBUTE_UNIQUE",
+      "publicAccess": "rw------",
+      "valueType": "TEXT",
+      "displayFormName": "OU_ATTRIBUTE",
+      "organisationUnitAttribute": true,
+      "unique": true,
+      "displayName": "OU_ATTRIBUTE",
+      "sharing": {
+        "owner": "PQD6wXJ2r5j",
+        "userGroups": {},
+        "external": false,
+        "public": "rw------",
+        "users": {}
+      }
+    },
+    {
+      "id": "wLFJWAiOPZZ",
+      "name": "UNIQUE_PROGRAM_ATTRIBUTE",
+      "code": "TA_PROGRAM_ATTRIBUTE_UNIQUE",
+      "publicAccess": "rw------",
+      "valueType": "TEXT",
+      "displayFormName": "OU_ATTRIBUTE",
+      "programAttribute": true,
+      "unique": true,
+      "displayName": "PROGRAM_ATTRIBUTE",
+      "sharing": {
+        "owner": "PQD6wXJ2r5j",
+        "userGroups": {},
+        "external": false,
+        "public": "rw------",
+        "users": {}
+      }
+    }
+  ],
   "categories": [
     {
       "code": "default",
@@ -463,7 +501,15 @@
         }
       ],
       "programSections": [],
-      "attributeValues": [],
+      "attributeValues": [
+        {
+          "value": "TA_EVENT_PROGRAM_ATT",
+          "attribute": {
+            "id": "wLFJWAiOPZZ",
+            "code": "TA_PROGRAM_ATTRIBUTE_UNIQUE"
+          }
+        }
+      ],
       "programStages": [
         {
           "id": "jKLB23QZS4I",
@@ -613,7 +659,15 @@
         }
       ],
       "programSections": [],
-      "attributeValues": [],
+      "attributeValues": [
+        {
+          "value": "TA_TRACKER_PROGRAM_ATT",
+          "attribute": {
+            "id": "wLFJWAiOPZZ",
+            "code": "TA_PROGRAM_ATTRIBUTE_UNIQUE"
+          }
+        }
+      ],
       "programStages": [
         {
           "id": "nlXNK4b7LVr",
@@ -685,7 +739,15 @@
         }
       ],
       "programSections": [],
-      "attributeValues": [],
+      "attributeValues": [
+        {
+          "value": "TA_TRACKER2_PROGRAM_ATT",
+          "attribute": {
+            "id": "wLFJWAiOPZZ",
+            "code": "TA_PROGRAM_ATTRIBUTE_UNIQUE"
+          }
+        }
+      ],
       "programStages": [
         {
           "id": "PaOOjwLVW2X",
@@ -958,11 +1020,19 @@
           8.1039
         ]
       },
+      "attributeValues": [
+        {
+          "value": "OU_ATTRIBUTE_VALUE_NG",
+          "attribute": {
+            "id": "wLFJWAiOPZY",
+            "code": "TA_OU_ATTRIBUTE_UNIQUE"
+          }
+        }
+      ],
       "parent": {
         "id": "YuQRtpLP10I",
         "code": "OU_539"
-      },
-      "attributeValues": []
+      }
     },
     {
       "code": "OU_167609",
@@ -978,7 +1048,15 @@
         "id": "YuQRtpLP10I",
         "code": "OU_539"
       },
-      "attributeValues": []
+      "attributeValues": [
+        {
+          "value": "OU_ATTRIBUTE_VALUE_NJ",
+          "attribute": {
+            "id": "wLFJWAiOPZY",
+            "code": "TA_OU_ATTRIBUTE_UNIQUE"
+          }
+        }
+      ]
     },
     {
       "code": "OU_539",
@@ -1337,7 +1415,15 @@
         "id": "O6uvpzGd5pu",
         "code": "OU_264"
       },
-      "attributeValues": []
+      "attributeValues": [
+        {
+          "value": "OU_ATTRIBUTE_VALUE_BA",
+          "attribute": {
+            "id": "wLFJWAiOPZY",
+            "code": "TA_OU_ATTRIBUTE_UNIQUE"
+          }
+        }
+      ]
     },
     {
       "code": "OU_264",
@@ -3555,7 +3641,15 @@
         "id": "ImspTQPwCqd",
         "code": "OU_525"
       },
-      "attributeValues": []
+      "attributeValues": [
+        {
+          "value": "OU_ATTRIBUTE_VALUE_BO",
+          "attribute": {
+            "id": "wLFJWAiOPZY",
+            "code": "TA_OU_ATTRIBUTE_UNIQUE"
+          }
+        }
+      ]
     },
     {
       "code": "OU_525",
@@ -3566,7 +3660,15 @@
       "name": "Sierra Leone",
       "shortName": "Sierra Leone",
       "openingDate": "1994-01-01T00:00:00.000",
-      "attributeValues": []
+      "attributeValues": [
+        {
+          "value": "OU_ATTRIBUTE_VALUE_SL",
+          "attribute": {
+            "id": "wLFJWAiOPZY",
+            "code": "TA_OU_ATTRIBUTE_UNIQUE"
+          }
+        }
+      ]
     }
   ],
   "organisationUnitGroups": [
@@ -3781,7 +3883,6 @@
       "categoryCombo": {
         "id": "bjDvmb4bfuf",
         "code": "default"
-
       },
       "translations": [],
       "userGroupAccesses": [
@@ -3811,7 +3912,6 @@
       "categoryCombo": {
         "id": "bjDvmb4bfuf",
         "code": "default"
-
       },
       "translations": [],
       "userGroupAccesses": [
