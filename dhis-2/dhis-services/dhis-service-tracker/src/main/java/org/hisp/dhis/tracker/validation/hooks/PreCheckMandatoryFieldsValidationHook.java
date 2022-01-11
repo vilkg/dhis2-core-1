@@ -53,7 +53,8 @@ public class PreCheckMandatoryFieldsValidationHook
     private static final String ORG_UNIT = "orgUnit";
 
     @Override
-    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity trackedEntity )
+    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        TrackedEntity trackedEntity )
     {
         addErrorIf( () -> StringUtils.isEmpty( trackedEntity.getTrackedEntityType() ), reporter, trackedEntity, E1121,
             "trackedEntityType" );
@@ -99,7 +100,8 @@ public class PreCheckMandatoryFieldsValidationHook
     }
 
     @Override
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    public void validateRelationship( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Relationship relationship )
     {
         addErrorIfNull( relationship.getFrom(), reporter, relationship, E1124, "from" );
         addErrorIfNull( relationship.getTo(), reporter, relationship, E1124, "to" );

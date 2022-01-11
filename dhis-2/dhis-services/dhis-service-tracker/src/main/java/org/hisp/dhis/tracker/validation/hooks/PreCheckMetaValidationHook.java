@@ -59,10 +59,9 @@ public class PreCheckMetaValidationHook
     extends AbstractTrackerDtoValidationHook
 {
     @Override
-    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity tei )
+    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        TrackedEntity tei )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         OrganisationUnit organisationUnit = context.getOrganisationUnit( tei.getOrgUnit() );
         if ( organisationUnit == null )
         {
@@ -104,10 +103,9 @@ public class PreCheckMetaValidationHook
     }
 
     @Override
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    public void validateRelationship( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Relationship relationship )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         RelationshipType relationshipType = context.getRelationShipType( relationship.getRelationshipType() );
 
         addErrorIfNull( relationshipType, reporter, relationship, E4006, relationship.getRelationshipType() );

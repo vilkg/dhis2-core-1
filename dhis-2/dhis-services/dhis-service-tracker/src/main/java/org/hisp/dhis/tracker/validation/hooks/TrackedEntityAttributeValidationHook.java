@@ -80,12 +80,11 @@ public class TrackedEntityAttributeValidationHook extends AttributeValidationHoo
     }
 
     @Override
-    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity trackedEntity )
+    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        TrackedEntity trackedEntity )
     {
         TrackedEntityType trackedEntityType = reporter.getValidationContext()
             .getTrackedEntityType( trackedEntity.getTrackedEntityType() );
-
-        TrackerImportValidationContext context = reporter.getValidationContext();
 
         TrackedEntityInstance tei = context.getTrackedEntityInstance( trackedEntity.getTrackedEntity() );
         OrganisationUnit organisationUnit = context.getOrganisationUnit( trackedEntity.getOrgUnit() );

@@ -113,7 +113,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getTrackedEntityType( TRACKED_ENTITY_TYPE_UID ) ).thenReturn( new TrackedEntityType() );
 
-        validatorToTest.validateTrackedEntity( reporter, tei );
+        validatorToTest.validateTrackedEntity( reporter, ctx, tei );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -130,7 +130,7 @@ class PreCheckMetaValidationHookTest
         // when
         when( ctx.getTrackedEntityType( TRACKED_ENTITY_TYPE_UID ) ).thenReturn( new TrackedEntityType() );
 
-        validatorToTest.validateTrackedEntity( reporter, tei );
+        validatorToTest.validateTrackedEntity( reporter, ctx, tei );
 
         // then
         hasTrackerError( reporter, E1049, TRACKED_ENTITY, tei.getUid() );
@@ -147,7 +147,7 @@ class PreCheckMetaValidationHookTest
         // when
         when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
 
-        validatorToTest.validateTrackedEntity( reporter, tei );
+        validatorToTest.validateTrackedEntity( reporter, ctx, tei );
 
         // then
         hasTrackerError( reporter, E1005, TRACKED_ENTITY, tei.getUid() );
@@ -330,7 +330,7 @@ class PreCheckMetaValidationHookTest
         // when
         when( ctx.getRelationShipType( RELATIONSHIP_TYPE_UID ) ).thenReturn( new RelationshipType() );
 
-        validatorToTest.validateRelationship( reporter, relationship );
+        validatorToTest.validateRelationship( reporter, ctx, relationship );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -345,7 +345,7 @@ class PreCheckMetaValidationHookTest
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
 
         // when
-        validatorToTest.validateRelationship( reporter, relationship );
+        validatorToTest.validateRelationship( reporter, ctx, relationship );
 
         // then
         hasTrackerError( reporter, E4006, RELATIONSHIP, relationship.getUid() );

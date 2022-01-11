@@ -54,11 +54,9 @@ public class PreCheckUpdatableFieldsValidationHook
     extends AbstractTrackerDtoValidationHook
 {
     @Override
-    public void validateTrackedEntity( ValidationErrorReporter reporter,
+    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackerImportValidationContext context,
         TrackedEntity trackedEntity )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         TrackedEntityInstance trackedEntityInstance = context
             .getTrackedEntityInstance( trackedEntity.getTrackedEntity() );
 
@@ -99,7 +97,8 @@ public class PreCheckUpdatableFieldsValidationHook
     }
 
     @Override
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    public void validateRelationship( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Relationship relationship )
     {
         // Nothing to do
     }

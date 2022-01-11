@@ -92,9 +92,9 @@ public class PreCheckSecurityOwnershipValidationHook
     private final OrganisationUnitService organisationUnitService;
 
     @Override
-    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity trackedEntity )
+    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        TrackedEntity trackedEntity )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
         TrackerImportStrategy strategy = context.getStrategy( trackedEntity );
         TrackerBundle bundle = context.getBundle();
         User user = bundle.getUser();
@@ -256,7 +256,8 @@ public class PreCheckSecurityOwnershipValidationHook
     }
 
     @Override
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    public void validateRelationship( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Relationship relationship )
     {
         // NOTHING TO DO HERE
     }

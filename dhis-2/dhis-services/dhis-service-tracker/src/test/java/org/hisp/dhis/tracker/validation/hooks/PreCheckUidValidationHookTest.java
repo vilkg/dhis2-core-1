@@ -75,7 +75,7 @@ class PreCheckUidValidationHookTest
         TrackedEntity trackedEntity = TrackedEntity.builder().trackedEntity( CodeGenerator.generateUid() )
             .orgUnit( CodeGenerator.generateUid() ).build();
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateTrackedEntity( reporter, trackedEntity );
+        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
         assertFalse( reporter.hasErrors() );
     }
 
@@ -87,7 +87,7 @@ class PreCheckUidValidationHookTest
             .orgUnit( CodeGenerator.generateUid() ).build();
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateTrackedEntity( reporter, trackedEntity );
+        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
         // then
         hasTrackerError( reporter, E1048, TRACKED_ENTITY, trackedEntity.getUid() );
     }
@@ -170,7 +170,7 @@ class PreCheckUidValidationHookTest
         // given
         Relationship relationship = Relationship.builder().relationship( CodeGenerator.generateUid() ).build();
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateRelationship( reporter, relationship );
+        validationHook.validateRelationship( reporter, ctx, relationship );
         // then
         assertFalse( reporter.hasErrors() );
     }
@@ -181,7 +181,7 @@ class PreCheckUidValidationHookTest
         // given
         Relationship relationship = Relationship.builder().relationship( INVALID_UID ).build();
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateRelationship( reporter, relationship );
+        validationHook.validateRelationship( reporter, ctx, relationship );
         // then
         hasTrackerError( reporter, E1048, RELATIONSHIP, relationship.getUid() );
     }

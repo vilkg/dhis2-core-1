@@ -104,7 +104,7 @@ class PreCheckMandatoryFieldsValidationHookTest
             .build();
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateTrackedEntity( reporter, trackedEntity );
+        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
 
         assertFalse( reporter.hasErrors() );
     }
@@ -119,7 +119,7 @@ class PreCheckMandatoryFieldsValidationHookTest
             .build();
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateTrackedEntity( reporter, trackedEntity );
+        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
 
         assertMissingPropertyForTrackedEntity( reporter, trackedEntity.getUid(), "orgUnit" );
     }
@@ -134,7 +134,7 @@ class PreCheckMandatoryFieldsValidationHookTest
             .build();
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateTrackedEntity( reporter, trackedEntity );
+        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
 
         assertMissingPropertyForTrackedEntity( reporter, trackedEntity.getUid(), "trackedEntityType" );
     }
@@ -302,7 +302,7 @@ class PreCheckMandatoryFieldsValidationHookTest
             .build();
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateRelationship( reporter, relationship );
+        validationHook.validateRelationship( reporter, ctx, relationship );
 
         assertFalse( reporter.hasErrors() );
     }
@@ -319,7 +319,7 @@ class PreCheckMandatoryFieldsValidationHookTest
             .build();
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateRelationship( reporter, relationship );
+        validationHook.validateRelationship( reporter, ctx, relationship );
 
         assertMissingPropertyForRelationship( reporter, relationship.getUid(), "from" );
     }
@@ -336,7 +336,7 @@ class PreCheckMandatoryFieldsValidationHookTest
             .build();
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateRelationship( reporter, relationship );
+        validationHook.validateRelationship( reporter, ctx, relationship );
 
         assertMissingPropertyForRelationship( reporter, relationship.getUid(), "to" );
     }
@@ -355,7 +355,7 @@ class PreCheckMandatoryFieldsValidationHookTest
             .build();
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateRelationship( reporter, relationship );
+        validationHook.validateRelationship( reporter, ctx, relationship );
 
         assertMissingPropertyForRelationship( reporter, relationship.getUid(), "relationshipType" );
     }
