@@ -66,10 +66,8 @@ public class EventCategoryOptValidationHook
     }
 
     @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context, Event event )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         Program program = context.getProgram( event.getProgram() );
         checkNotNull( program, TrackerImporterAssertErrors.PROGRAM_CANT_BE_NULL );
         checkNotNull( context.getBundle().getUser(), TrackerImporterAssertErrors.USER_CANT_BE_NULL );

@@ -97,7 +97,7 @@ class EventNoteValidationHookTest
         event.setNotes( Collections.singletonList( note ) );
 
         // When
-        this.hook.validateEvent( reporter, event );
+        this.hook.validateEvent( reporter, ctx, event );
 
         // Then
         assertTrue( reporter.hasWarnings() );
@@ -124,7 +124,7 @@ class EventNoteValidationHookTest
         event.setNotes( Collections.singletonList( note ) );
 
         // When
-        this.hook.validateEvent( reporter, event );
+        this.hook.validateEvent( reporter, ctx, event );
 
         // Then
         assertFalse( reporter.hasErrors() );
@@ -146,7 +146,7 @@ class EventNoteValidationHookTest
         event.setNotes( notes );
 
         // When
-        this.hook.validateEvent( reporter, event );
+        this.hook.validateEvent( reporter, ctx, event );
 
         // Then
         assertFalse( reporter.hasErrors() );

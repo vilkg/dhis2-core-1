@@ -143,7 +143,7 @@ class PreCheckUpdatableFieldsValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -158,7 +158,7 @@ class PreCheckUpdatableFieldsValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         hasTrackerError( reporter, E1127, ENROLLMENT, enrollment.getUid() );
@@ -174,7 +174,7 @@ class PreCheckUpdatableFieldsValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         hasTrackerError( reporter, E1127, ENROLLMENT, enrollment.getUid() );
@@ -189,7 +189,7 @@ class PreCheckUpdatableFieldsValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -204,7 +204,7 @@ class PreCheckUpdatableFieldsValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         hasTrackerError( reporter, E1128, EVENT, event.getUid() );
@@ -220,7 +220,7 @@ class PreCheckUpdatableFieldsValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         hasTrackerError( reporter, E1128, EVENT, event.getUid() );

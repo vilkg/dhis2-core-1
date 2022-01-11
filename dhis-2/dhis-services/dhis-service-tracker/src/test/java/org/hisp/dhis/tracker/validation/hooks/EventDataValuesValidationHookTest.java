@@ -123,7 +123,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), empty() );
@@ -139,7 +139,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 0 ) );
@@ -155,7 +155,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 0 ) );
@@ -172,7 +172,7 @@ class EventDataValuesValidationHookTest
         when( validationContext.getDataElement( dataElementUid ) ).thenReturn( null );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -205,7 +205,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -237,7 +237,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), empty() );
@@ -271,7 +271,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -293,7 +293,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -317,7 +317,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -344,7 +344,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 0 ) );
@@ -374,7 +374,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -406,7 +406,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -416,7 +416,7 @@ class EventDataValuesValidationHookTest
 
         // When
         reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -447,7 +447,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 0 ) );
@@ -456,7 +456,7 @@ class EventDataValuesValidationHookTest
 
         // When
         reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -486,7 +486,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 0 ) );
@@ -495,7 +495,7 @@ class EventDataValuesValidationHookTest
 
         // When
         reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 0 ) );
@@ -525,7 +525,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 0 ) );
@@ -551,7 +551,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -605,7 +605,7 @@ class EventDataValuesValidationHookTest
         when( event.getDataValues() ).thenReturn( Sets.newHashSet( validDataValue, nullDataValue ) );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         assertFalse( reporter.hasErrors() );
         assertThat( reporter.getReportList(), hasSize( 0 ) );
@@ -637,7 +637,7 @@ class EventDataValuesValidationHookTest
         when( event.getDataValues() ).thenReturn( Sets.newHashSet( validDataValue ) );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         assertTrue( reporter.hasErrors() );
         assertThat( reporter.getReportList(), hasSize( 1 ) );
@@ -661,7 +661,7 @@ class EventDataValuesValidationHookTest
 
         // When
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEvent( reporter, event );
+        hookToTest.validateEvent( reporter, validationContext, event );
 
         // Then
         assertThat( reporter.getReportList(), hasSize( 1 ) );

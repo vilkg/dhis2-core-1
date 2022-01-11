@@ -52,7 +52,8 @@ public class EnrollmentInExistingValidationHook
     extends AbstractTrackerDtoValidationHook
 {
     @Override
-    public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
+    public void validateEnrollment( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Enrollment enrollment )
     {
         checkNotNull( enrollment, ENROLLMENT_CANT_BE_NULL );
 
@@ -61,9 +62,7 @@ public class EnrollmentInExistingValidationHook
             return;
         }
 
-        TrackerImportValidationContext validationContext = reporter.getValidationContext();
-
-        Program program = validationContext.getProgram( enrollment.getProgram() );
+        Program program = context.getProgram( enrollment.getProgram() );
 
         checkNotNull( program, PROGRAM_CANT_BE_NULL );
 

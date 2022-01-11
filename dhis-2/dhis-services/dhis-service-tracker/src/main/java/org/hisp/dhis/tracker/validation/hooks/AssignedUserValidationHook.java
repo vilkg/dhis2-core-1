@@ -35,6 +35,7 @@ import java.util.Optional;
 import org.hisp.dhis.common.CodeGenerator;
 import org.hisp.dhis.tracker.domain.Event;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.hisp.dhis.user.User;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,7 @@ public class AssignedUserValidationHook
     extends AbstractTrackerDtoValidationHook
 {
     @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context, Event event )
     {
         if ( event.getAssignedUser() != null )
         {

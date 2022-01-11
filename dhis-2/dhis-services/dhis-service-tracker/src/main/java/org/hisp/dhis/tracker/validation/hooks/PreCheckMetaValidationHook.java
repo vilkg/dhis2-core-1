@@ -77,10 +77,9 @@ public class PreCheckMetaValidationHook
     }
 
     @Override
-    public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
+    public void validateEnrollment( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Enrollment enrollment )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         OrganisationUnit organisationUnit = context.getOrganisationUnit( enrollment.getOrgUnit() );
         addErrorIfNull( organisationUnit, reporter, enrollment, E1070, enrollment.getOrgUnit() );
 
@@ -92,10 +91,8 @@ public class PreCheckMetaValidationHook
     }
 
     @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context, Event event )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         OrganisationUnit organisationUnit = context.getOrganisationUnit( event.getOrgUnit() );
         addErrorIfNull( organisationUnit, reporter, event, E1011, event.getOrgUnit() );
 

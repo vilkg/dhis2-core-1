@@ -238,7 +238,7 @@ class PreCheckExistenceValidationHookTest
         when( ctx.getStrategy( enrollment ) ).thenReturn( TrackerImportStrategy.CREATE );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -254,7 +254,7 @@ class PreCheckExistenceValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -270,7 +270,7 @@ class PreCheckExistenceValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -286,7 +286,7 @@ class PreCheckExistenceValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         hasTrackerError( reporter, E1113, ENROLLMENT, enrollment.getUid() );
@@ -304,7 +304,7 @@ class PreCheckExistenceValidationHookTest
         when( ctx.getStrategy( enrollment ) ).thenReturn( TrackerImportStrategy.CREATE );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         hasTrackerError( reporter, E1080, ENROLLMENT, enrollment.getUid() );
@@ -322,7 +322,7 @@ class PreCheckExistenceValidationHookTest
         when( ctx.getStrategy( enrollment ) ).thenReturn( TrackerImportStrategy.UPDATE );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEnrollment( reporter, enrollment );
+        validationHook.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         hasTrackerError( reporter, E1081, ENROLLMENT, enrollment.getUid() );
@@ -340,7 +340,7 @@ class PreCheckExistenceValidationHookTest
         when( ctx.getStrategy( event ) ).thenReturn( TrackerImportStrategy.CREATE );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -356,7 +356,7 @@ class PreCheckExistenceValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -372,7 +372,7 @@ class PreCheckExistenceValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -388,7 +388,7 @@ class PreCheckExistenceValidationHookTest
 
         // when
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         hasTrackerError( reporter, E1082, EVENT, event.getUid() );
@@ -406,7 +406,7 @@ class PreCheckExistenceValidationHookTest
         when( ctx.getStrategy( event ) ).thenReturn( TrackerImportStrategy.CREATE );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         hasTrackerError( reporter, E1030, EVENT, event.getUid() );
@@ -424,7 +424,7 @@ class PreCheckExistenceValidationHookTest
         when( ctx.getStrategy( event ) ).thenReturn( TrackerImportStrategy.UPDATE );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( ctx );
-        validationHook.validateEvent( reporter, event );
+        validationHook.validateEvent( reporter, ctx, event );
 
         // then
         hasTrackerError( reporter, E1032, EVENT, event.getUid() );

@@ -97,7 +97,7 @@ class EnrollmentNoteValidationHookTest
         enrollment.setNotes( Collections.singletonList( note ) );
 
         // When
-        this.hook.validateEnrollment( reporter, enrollment );
+        this.hook.validateEnrollment( reporter, ctx, enrollment );
 
         // Then
         assertTrue( reporter.hasWarnings() );
@@ -124,7 +124,7 @@ class EnrollmentNoteValidationHookTest
         enrollment.setNotes( Collections.singletonList( note ) );
 
         // When
-        this.hook.validateEnrollment( reporter, enrollment );
+        this.hook.validateEnrollment( reporter, ctx, enrollment );
 
         // Then
         assertFalse( reporter.hasErrors() );
@@ -146,7 +146,7 @@ class EnrollmentNoteValidationHookTest
         enrollment.setNotes( notes );
 
         // When
-        this.hook.validateEnrollment( reporter, enrollment );
+        this.hook.validateEnrollment( reporter, ctx, enrollment );
 
         // Then
         assertFalse( reporter.hasErrors() );

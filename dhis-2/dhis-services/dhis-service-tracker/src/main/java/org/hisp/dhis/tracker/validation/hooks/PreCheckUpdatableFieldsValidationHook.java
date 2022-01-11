@@ -67,10 +67,9 @@ public class PreCheckUpdatableFieldsValidationHook
     }
 
     @Override
-    public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
+    public void validateEnrollment( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Enrollment enrollment )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         ProgramInstance pi = context.getProgramInstance( enrollment.getEnrollment() );
         Program program = pi.getProgram();
         TrackedEntityInstance trackedEntityInstance = pi.getEntityInstance();
@@ -81,10 +80,8 @@ public class PreCheckUpdatableFieldsValidationHook
     }
 
     @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context, Event event )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         ProgramStageInstance programStageInstance = context.getProgramStageInstance( event.getEvent() );
         ProgramStage programStage = programStageInstance.getProgramStage();
         ProgramInstance programInstance = programStageInstance.getProgramInstance();

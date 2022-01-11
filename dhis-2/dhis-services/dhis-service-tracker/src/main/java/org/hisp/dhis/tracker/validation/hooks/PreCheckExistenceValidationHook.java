@@ -84,9 +84,9 @@ public class PreCheckExistenceValidationHook
     }
 
     @Override
-    public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
+    public void validateEnrollment( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Enrollment enrollment )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
         TrackerImportStrategy importStrategy = context.getStrategy( enrollment );
 
         ProgramInstance existingPi = context.getProgramInstance( enrollment.getEnrollment() );
@@ -109,9 +109,8 @@ public class PreCheckExistenceValidationHook
     }
 
     @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context, Event event )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
         TrackerImportStrategy importStrategy = context.getStrategy( event );
 
         ProgramStageInstance existingPsi = context.getProgramStageInstance( event.getEvent() );
