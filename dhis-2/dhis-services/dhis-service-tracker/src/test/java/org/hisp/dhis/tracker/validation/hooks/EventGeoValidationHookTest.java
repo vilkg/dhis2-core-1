@@ -93,7 +93,7 @@ class EventGeoValidationHookTest
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
 
         // when
-        this.hookToTest.validateEvent( reporter, event );
+        this.hookToTest.validateEvent( reporter, validationContext, event );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -110,7 +110,8 @@ class EventGeoValidationHookTest
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
 
         // when
-        assertThrows( NullPointerException.class, () -> this.hookToTest.validateEvent( reporter, event ) );
+        assertThrows( NullPointerException.class,
+            () -> this.hookToTest.validateEvent( reporter, validationContext, event ) );
     }
 
     @Test
@@ -127,7 +128,7 @@ class EventGeoValidationHookTest
         // when
         when( validationContext.getProgramStage( event.getProgramStage() ) ).thenReturn( new ProgramStage() );
 
-        this.hookToTest.validateEvent( reporter, event );
+        this.hookToTest.validateEvent( reporter, validationContext, event );
 
         // then
         hasTrackerError( reporter, E1074, EVENT, event.getUid() );
@@ -149,7 +150,7 @@ class EventGeoValidationHookTest
         programStage.setFeatureType( NONE );
         when( validationContext.getProgramStage( event.getProgramStage() ) ).thenReturn( programStage );
 
-        this.hookToTest.validateEvent( reporter, event );
+        this.hookToTest.validateEvent( reporter, validationContext, event );
 
         // then
         hasTrackerError( reporter, E1012, EVENT, event.getUid() );
@@ -171,7 +172,7 @@ class EventGeoValidationHookTest
         programStage.setFeatureType( MULTI_POLYGON );
         when( validationContext.getProgramStage( event.getProgramStage() ) ).thenReturn( programStage );
 
-        this.hookToTest.validateEvent( reporter, event );
+        this.hookToTest.validateEvent( reporter, validationContext, event );
 
         // then
         hasTrackerError( reporter, E1012, EVENT, event.getUid() );

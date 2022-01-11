@@ -69,7 +69,8 @@ class TrackerValidationServiceReportTest
         private BiConsumer<ValidationErrorReporter, Enrollment> validateEnrollment;
 
         @Override
-        public void validateEvent( ValidationErrorReporter reporter, Event event )
+        public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+            Event event )
         {
             if ( this.validateEvent != null )
             {
@@ -78,7 +79,8 @@ class TrackerValidationServiceReportTest
         }
 
         @Override
-        public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
+        public void validateEnrollment( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+            Enrollment enrollment )
         {
             if ( this.validateEnrollment != null )
             {

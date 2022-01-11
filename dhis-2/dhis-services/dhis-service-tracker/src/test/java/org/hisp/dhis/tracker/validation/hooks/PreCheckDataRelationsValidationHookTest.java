@@ -229,7 +229,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         assertFalse( reporter.hasErrors() );
     }
@@ -247,7 +247,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         assertTrue( reporter.hasErrors() );
         assertEquals( TrackerErrorCode.E1014, reporter.getReportList().get( 0 ).getErrorCode() );
@@ -266,7 +266,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         assertTrue( reporter.hasErrors() );
         assertEquals( TrackerErrorCode.E1041, reporter.getReportList().get( 0 ).getErrorCode() );
@@ -285,7 +285,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         assertTrue( reporter.hasErrors() );
         assertEquals( TrackerErrorCode.E1022, reporter.getReportList().get( 0 ).getErrorCode() );
@@ -313,7 +313,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         bundle.setTrackedEntities( Lists.newArrayList( trackedEntity ) );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         assertTrue( reporter.hasErrors() );
         assertEquals( TrackerErrorCode.E1022, reporter.getReportList().get( 0 ).getErrorCode() );
@@ -333,7 +333,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         assertFalse( reporter.hasErrors() );
     }
@@ -351,7 +351,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         assertTrue( reporter.hasErrors() );
         assertThat(
@@ -372,7 +372,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         assertTrue( reporter.hasErrors() );
         assertThat(
@@ -394,7 +394,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         assertTrue( reporter.hasErrors() );
         assertThat(
@@ -416,7 +416,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         assertTrue( reporter.hasErrors() );
         assertThat(

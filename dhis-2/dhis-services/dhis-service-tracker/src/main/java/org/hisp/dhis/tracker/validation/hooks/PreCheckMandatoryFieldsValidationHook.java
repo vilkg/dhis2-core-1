@@ -61,7 +61,8 @@ public class PreCheckMandatoryFieldsValidationHook
     }
 
     @Override
-    public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
+    public void validateEnrollment( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Enrollment enrollment )
     {
         addErrorIf( () -> StringUtils.isEmpty( enrollment.getOrgUnit() ), reporter, enrollment, E1122, ORG_UNIT );
         addErrorIf( () -> StringUtils.isEmpty( enrollment.getProgram() ), reporter, enrollment, E1122, "program" );
@@ -70,13 +71,12 @@ public class PreCheckMandatoryFieldsValidationHook
     }
 
     @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context, Event event )
     {
         addErrorIf( () -> StringUtils.isEmpty( event.getOrgUnit() ), reporter, event, E1123, ORG_UNIT );
         addErrorIf( () -> StringUtils.isEmpty( event.getProgramStage() ), reporter, event, E1123, "programStage" );
 
         // TODO remove if once metadata import is fixed
-        TrackerImportValidationContext context = reporter.getValidationContext();
         ProgramStage programStage = context.getProgramStage( event.getProgramStage() );
         if ( programStage != null )
         {

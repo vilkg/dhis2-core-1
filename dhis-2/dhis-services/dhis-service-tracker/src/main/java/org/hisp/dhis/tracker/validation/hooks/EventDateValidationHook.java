@@ -60,10 +60,8 @@ public class EventDateValidationHook
     extends AbstractTrackerDtoValidationHook
 {
     @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context, Event event )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         Program program = context.getProgram( event.getProgram() );
 
         if ( event.getOccurredAt() == null && occuredAtDateIsMandatory( event, program ) )

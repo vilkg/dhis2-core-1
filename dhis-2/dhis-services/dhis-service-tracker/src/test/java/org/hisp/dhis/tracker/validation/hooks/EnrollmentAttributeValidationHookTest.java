@@ -149,7 +149,7 @@ class EnrollmentAttributeValidationHookTest
             .thenReturn( trackedEntityInstance );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEnrollment( reporter, enrollment );
+        hookToTest.validateEnrollment( reporter, validationContext, enrollment );
 
         assertThat( reporter.getReportList(), hasSize( 1 ) );
         hasTrackerError( reporter, TrackerErrorCode.E1076, TrackerType.ENROLLMENT, enrollment.getUid() );
@@ -177,7 +177,7 @@ class EnrollmentAttributeValidationHookTest
             .thenReturn( trackedEntityInstance );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEnrollment( reporter, enrollment );
+        hookToTest.validateEnrollment( reporter, validationContext, enrollment );
 
         assertThat( reporter.getReportList(), hasSize( 0 ) );
     }
@@ -203,7 +203,7 @@ class EnrollmentAttributeValidationHookTest
             .thenReturn( trackedEntityInstance );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEnrollment( reporter, enrollment );
+        hookToTest.validateEnrollment( reporter, validationContext, enrollment );
 
         assertThat( reporter.getReportList(), hasSize( 2 ) );
         hasTrackerError( reporter, TrackerErrorCode.E1076, TrackerType.ENROLLMENT, enrollment.getUid() );
@@ -229,7 +229,7 @@ class EnrollmentAttributeValidationHookTest
             .thenReturn( trackedEntityInstance );
 
         ValidationErrorReporter reporter = new ValidationErrorReporter( validationContext );
-        hookToTest.validateEnrollment( reporter, enrollment );
+        hookToTest.validateEnrollment( reporter, validationContext, enrollment );
 
         assertThat( reporter.getReportList(), hasSize( 1 ) );
         hasTrackerError( reporter,

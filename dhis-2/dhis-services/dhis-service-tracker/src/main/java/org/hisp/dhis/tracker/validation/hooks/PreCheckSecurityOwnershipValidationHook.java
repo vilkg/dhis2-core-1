@@ -163,9 +163,9 @@ public class PreCheckSecurityOwnershipValidationHook
     }
 
     @Override
-    public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
+    public void validateEnrollment( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Enrollment enrollment )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
         TrackerImportStrategy strategy = context.getStrategy( enrollment );
         TrackerBundle bundle = context.getBundle();
         User user = bundle.getUser();
@@ -209,9 +209,8 @@ public class PreCheckSecurityOwnershipValidationHook
     }
 
     @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    public void validateEvent( ValidationErrorReporter reporter, TrackerImportValidationContext context, Event event )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
         TrackerImportStrategy strategy = context.getStrategy( event );
         TrackerBundle bundle = context.getBundle();
         User user = bundle.getUser();

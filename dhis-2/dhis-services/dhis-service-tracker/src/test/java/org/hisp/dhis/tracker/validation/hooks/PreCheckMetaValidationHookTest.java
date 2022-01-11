@@ -166,7 +166,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getTrackedEntityInstance( TRACKED_ENTITY_UID ) ).thenReturn( new TrackedEntityInstance() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -186,7 +186,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -204,7 +204,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
         when( ctx.getTrackedEntityInstance( TRACKED_ENTITY_UID ) ).thenReturn( new TrackedEntityInstance() );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         hasTrackerError( reporter, E1070, ENROLLMENT, enrollment.getUid() );
@@ -222,7 +222,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         hasTrackerError( reporter, E1068, ENROLLMENT, enrollment.getUid() );
@@ -240,7 +240,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getTrackedEntityInstance( TRACKED_ENTITY_UID ) ).thenReturn( new TrackedEntityInstance() );
 
-        validatorToTest.validateEnrollment( reporter, enrollment );
+        validatorToTest.validateEnrollment( reporter, ctx, enrollment );
 
         // then
         hasTrackerError( reporter, E1069, ENROLLMENT, enrollment.getUid() );
@@ -259,7 +259,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
         when( ctx.getProgramStage( PROGRAM_STAGE_UID ) ).thenReturn( new ProgramStage() );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         // then
         assertFalse( reporter.hasErrors() );
@@ -277,7 +277,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgramStage( PROGRAM_STAGE_UID ) ).thenReturn( new ProgramStage() );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         // then
         hasTrackerError( reporter, E1010, EVENT, event.getUid() );
@@ -295,7 +295,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         // then
         hasTrackerError( reporter, E1013, EVENT, event.getUid() );
@@ -313,7 +313,7 @@ class PreCheckMetaValidationHookTest
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
         when( ctx.getProgramStage( PROGRAM_STAGE_UID ) ).thenReturn( new ProgramStage() );
 
-        validatorToTest.validateEvent( reporter, event );
+        validatorToTest.validateEvent( reporter, ctx, event );
 
         // then
         hasTrackerError( reporter, E1011, EVENT, event.getUid() );
