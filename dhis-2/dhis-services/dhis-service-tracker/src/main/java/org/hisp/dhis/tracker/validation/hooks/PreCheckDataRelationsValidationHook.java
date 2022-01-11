@@ -87,7 +87,7 @@ public class PreCheckDataRelationsValidationHook
     private final CategoryService categoryService;
 
     @Override
-    public void validateTrackedEntity( ValidationErrorReporter reporter,
+    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackerImportValidationContext context,
         TrackedEntity trackedEntity )
     {
         // NOTHING TO DO HERE
@@ -153,7 +153,8 @@ public class PreCheckDataRelationsValidationHook
     }
 
     @Override
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    public void validateRelationship( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Relationship relationship )
     {
         validateRelationshipReference( reporter, relationship, relationship.getFrom() );
         validateRelationshipReference( reporter, relationship, relationship.getTo() );

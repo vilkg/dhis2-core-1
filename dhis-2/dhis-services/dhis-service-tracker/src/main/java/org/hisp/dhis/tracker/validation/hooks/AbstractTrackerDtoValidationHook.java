@@ -70,12 +70,12 @@ public abstract class AbstractTrackerDtoValidationHook
     private final Map<TrackerType, TriConsumer<ValidationErrorReporter, TrackerImportValidationContext, TrackerDto>> validationMap = ImmutableMap
         .<TrackerType, TriConsumer<ValidationErrorReporter, TrackerImportValidationContext, TrackerDto>> builder()
         .put( TrackerType.TRACKED_ENTITY,
-            (( report, context, dto ) -> validateTrackedEntity( report, (TrackedEntity) dto )) )
+            (( report, context, dto ) -> validateTrackedEntity( report, context, (TrackedEntity) dto )) )
         .put( TrackerType.ENROLLMENT,
             (( report, context, dto ) -> validateEnrollment( report, context, (Enrollment) dto )) )
         .put( TrackerType.EVENT, (( report, context, dto ) -> validateEvent( report, context, (Event) dto )) )
         .put( TrackerType.RELATIONSHIP,
-            (( report, context, dto ) -> validateRelationship( report, (Relationship) dto )) )
+            (( report, context, dto ) -> validateRelationship( report, context, (Relationship) dto )) )
         .build();
 
     /**
@@ -115,9 +115,11 @@ public abstract class AbstractTrackerDtoValidationHook
      * dtoTypeClass == null
      *
      * @param reporter ValidationErrorReporter instance
+     * @param context TrackerValidationContext
      * @param relationship entity to validate
      */
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    public void validateRelationship( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Relationship relationship )
     {
     }
 
@@ -126,9 +128,11 @@ public abstract class AbstractTrackerDtoValidationHook
      * dtoTypeClass == null
      *
      * @param reporter ValidationErrorReporter instance
+     * @param context TrackerValidationContext
      * @param tei entity to validate
      */
-    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity tei )
+    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        TrackedEntity tei )
     {
     }
 

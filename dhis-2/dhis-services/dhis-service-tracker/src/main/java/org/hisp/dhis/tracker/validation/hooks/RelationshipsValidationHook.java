@@ -64,10 +64,9 @@ public class RelationshipsValidationHook
     extends AbstractTrackerDtoValidationHook
 {
 
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    public void validateRelationship( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Relationship relationship )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
-
         TrackerBundle bundle = context.getBundle();
 
         boolean isValid = validateMandatoryData( reporter, relationship,

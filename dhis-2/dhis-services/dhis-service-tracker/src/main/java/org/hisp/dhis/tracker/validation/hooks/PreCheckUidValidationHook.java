@@ -49,7 +49,8 @@ public class PreCheckUidValidationHook
     extends AbstractTrackerDtoValidationHook
 {
     @Override
-    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity trackedEntity )
+    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        TrackedEntity trackedEntity )
     {
         checkUidFormat( trackedEntity.getTrackedEntity(), reporter, trackedEntity, trackedEntity,
             trackedEntity.getTrackedEntity() );
@@ -73,7 +74,8 @@ public class PreCheckUidValidationHook
     }
 
     @Override
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    public void validateRelationship( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        Relationship relationship )
     {
         checkUidFormat( relationship.getRelationship(), reporter, relationship, relationship,
             relationship.getRelationship() );

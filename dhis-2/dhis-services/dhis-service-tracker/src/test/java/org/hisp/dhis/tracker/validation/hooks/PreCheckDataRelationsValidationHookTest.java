@@ -442,7 +442,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateRelationship( reporter, relationship );
+        validatorToTest.validateRelationship( reporter, ctx, relationship );
 
         assertTrue( reporter.hasErrors() );
         assertThat(
@@ -483,7 +483,7 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         reporter = new ValidationErrorReporter( ctx );
 
-        validatorToTest.validateRelationship( reporter, relationship );
+        validatorToTest.validateRelationship( reporter, ctx, relationship );
 
         assertFalse( reporter.hasErrors() );
     }
