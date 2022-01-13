@@ -63,7 +63,7 @@ public class PreCheckExistenceValidationHook
     public void validateTrackedEntity( TrackerValidationReport report, TrackerImportValidationContext context,
         TrackedEntity trackedEntity )
     {
-        TrackerImportStrategy importStrategy = context.getStrategy( trackedEntity );
+        TrackerImportStrategy importStrategy = context.getBundle().getStrategy( trackedEntity );
 
         TrackedEntityInstance existingTe = context
             .getTrackedEntityInstance( trackedEntity.getTrackedEntity() );
@@ -107,7 +107,7 @@ public class PreCheckExistenceValidationHook
     public void validateEnrollment( TrackerValidationReport report, TrackerImportValidationContext context,
         Enrollment enrollment )
     {
-        TrackerImportStrategy importStrategy = context.getStrategy( enrollment );
+        TrackerImportStrategy importStrategy = context.getBundle().getStrategy( enrollment );
 
         ProgramInstance existingPi = context.getProgramInstance( enrollment.getEnrollment() );
 
@@ -149,7 +149,7 @@ public class PreCheckExistenceValidationHook
     @Override
     public void validateEvent( TrackerValidationReport report, TrackerImportValidationContext context, Event event )
     {
-        TrackerImportStrategy importStrategy = context.getStrategy( event );
+        TrackerImportStrategy importStrategy = context.getBundle().getStrategy( event );
 
         ProgramStageInstance existingPsi = context.getProgramStageInstance( event.getEvent() );
 

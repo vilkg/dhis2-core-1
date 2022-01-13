@@ -45,7 +45,7 @@ import static org.hisp.dhis.tracker.report.TrackerErrorCode.E4015;
 import static org.hisp.dhis.tracker.validation.hooks.AssertValidationReport.hasError;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.hisp.dhis.program.ProgramInstance;
@@ -62,17 +62,10 @@ import org.hisp.dhis.tracker.report.TrackerValidationReport;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 /**
  * @author Enrico Colasante
  */
-@MockitoSettings( strictness = Strictness.LENIENT )
-@ExtendWith( MockitoExtension.class )
 class PreCheckExistenceValidationHookTest
 {
 
@@ -100,28 +93,20 @@ class PreCheckExistenceValidationHookTest
 
     private final static String RELATIONSHIP_UID = "RelationshipId";
 
-    @Mock
     private TrackerBundle bundle;
 
-    @Mock
     private TrackerImportValidationContext ctx;
+
+    private TrackerValidationReport report;
 
     @BeforeEach
     public void setUp()
     {
-        validationHook = new PreCheckExistenceValidationHook();
+        ctx = mock( TrackerImportValidationContext.class );
+        bundle = TrackerBundle.builder().build();
+        report = new TrackerValidationReport();
 
-        when( ctx.getBundle() ).thenReturn( bundle );
-        when( ctx.getStrategy( any( Event.class ) ) ).thenReturn( TrackerImportStrategy.CREATE_AND_UPDATE );
-        when( ctx.getStrategy( any( Enrollment.class ) ) ).thenReturn( TrackerImportStrategy.CREATE_AND_UPDATE );
-        when( ctx.getStrategy( any( TrackedEntity.class ) ) ).thenReturn( TrackerImportStrategy.CREATE_AND_UPDATE );
-        when( ctx.getTrackedEntityInstance( SOFT_DELETED_TEI_UID ) ).thenReturn( getSoftDeletedTei() );
-        when( ctx.getTrackedEntityInstance( TEI_UID ) ).thenReturn( getTei() );
-        when( ctx.getProgramInstance( SOFT_DELETED_ENROLLMENT_UID ) ).thenReturn( getSoftDeletedEnrollment() );
-        when( ctx.getProgramInstance( ENROLLMENT_UID ) ).thenReturn( getEnrollment() );
-        when( ctx.getProgramStageInstance( SOFT_DELETED_EVENT_UID ) ).thenReturn( getSoftDeletedEvent() );
-        when( ctx.getProgramStageInstance( EVENT_UID ) ).thenReturn( getEvent() );
-        when( ctx.getRelationship( getPayloadRelationship() ) ).thenReturn( getRelationship() );
+        validationHook = new PreCheckExistenceValidationHook();
     }
 
     @Test
@@ -133,13 +118,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( trackedEntity ) ).thenReturn( TrackerImportStrategy.CREATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( trackedEntity, TrackerImportStrategy.CREATE );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
+        validationHook.validateTrackedEntity( report, ctx, trackedEntity );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -151,11 +136,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( trackedEntity, TrackerImportStrategy.CREATE_AND_UPDATE );
+
+        validationHook.validateTrackedEntity( report, ctx, trackedEntity );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -167,11 +154,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( trackedEntity, TrackerImportStrategy.CREATE_AND_UPDATE );
+        when( ctx.getTrackedEntityInstance( TEI_UID ) ).thenReturn( getTei() );
+
+        validationHook.validateTrackedEntity( report, ctx, trackedEntity );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -183,11 +173,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( trackedEntity, TrackerImportStrategy.CREATE_AND_UPDATE );
+        when( ctx.getTrackedEntityInstance( SOFT_DELETED_TEI_UID ) ).thenReturn( getSoftDeletedTei() );
+
+        validationHook.validateTrackedEntity( report, ctx, trackedEntity );
 
         // then
-        hasError( reporter, E1114, TRACKED_ENTITY, trackedEntity.getUid() );
+        hasError( report, E1114, TRACKED_ENTITY, trackedEntity.getUid() );
     }
 
     @Test
@@ -199,13 +192,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( trackedEntity ) ).thenReturn( TrackerImportStrategy.CREATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( trackedEntity, TrackerImportStrategy.CREATE );
+        when( ctx.getTrackedEntityInstance( TEI_UID ) ).thenReturn( getTei() );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
+        validationHook.validateTrackedEntity( report, ctx, trackedEntity );
 
         // then
-        hasError( reporter, E1002, TRACKED_ENTITY, trackedEntity.getUid() );
+        hasError( report, E1002, TRACKED_ENTITY, trackedEntity.getUid() );
     }
 
     @Test
@@ -217,13 +211,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( trackedEntity ) ).thenReturn( TrackerImportStrategy.UPDATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( trackedEntity, TrackerImportStrategy.UPDATE );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateTrackedEntity( reporter, ctx, trackedEntity );
+        validationHook.validateTrackedEntity( report, ctx, trackedEntity );
 
         // then
-        hasError( reporter, E1063, TRACKED_ENTITY, trackedEntity.getUid() );
+        hasError( report, E1063, TRACKED_ENTITY, trackedEntity.getUid() );
     }
 
     @Test
@@ -235,13 +229,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( enrollment ) ).thenReturn( TrackerImportStrategy.CREATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( enrollment, TrackerImportStrategy.CREATE );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEnrollment( reporter, ctx, enrollment );
+        validationHook.validateEnrollment( report, ctx, enrollment );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -253,11 +247,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEnrollment( reporter, ctx, enrollment );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( enrollment, TrackerImportStrategy.CREATE_AND_UPDATE );
+
+        validationHook.validateEnrollment( report, ctx, enrollment );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -269,11 +265,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEnrollment( reporter, ctx, enrollment );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( enrollment, TrackerImportStrategy.CREATE_AND_UPDATE );
+        when( ctx.getProgramInstance( ENROLLMENT_UID ) ).thenReturn( getEnrollment() );
+
+        validationHook.validateEnrollment( report, ctx, enrollment );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -285,11 +284,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEnrollment( reporter, ctx, enrollment );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( enrollment, TrackerImportStrategy.CREATE_AND_UPDATE );
+        when( ctx.getProgramInstance( SOFT_DELETED_ENROLLMENT_UID ) ).thenReturn( getSoftDeletedEnrollment() );
+
+        validationHook.validateEnrollment( report, ctx, enrollment );
 
         // then
-        hasError( reporter, E1113, ENROLLMENT, enrollment.getUid() );
+        hasError( report, E1113, ENROLLMENT, enrollment.getUid() );
     }
 
     @Test
@@ -301,13 +303,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( enrollment ) ).thenReturn( TrackerImportStrategy.CREATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( enrollment, TrackerImportStrategy.CREATE );
+        when( ctx.getProgramInstance( ENROLLMENT_UID ) ).thenReturn( getEnrollment() );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEnrollment( reporter, ctx, enrollment );
+        validationHook.validateEnrollment( report, ctx, enrollment );
 
         // then
-        hasError( reporter, E1080, ENROLLMENT, enrollment.getUid() );
+        hasError( report, E1080, ENROLLMENT, enrollment.getUid() );
     }
 
     @Test
@@ -319,13 +322,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( enrollment ) ).thenReturn( TrackerImportStrategy.UPDATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( enrollment, TrackerImportStrategy.UPDATE );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEnrollment( reporter, ctx, enrollment );
+        validationHook.validateEnrollment( report, ctx, enrollment );
 
         // then
-        hasError( reporter, E1081, ENROLLMENT, enrollment.getUid() );
+        hasError( report, E1081, ENROLLMENT, enrollment.getUid() );
     }
 
     @Test
@@ -337,13 +340,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( event ) ).thenReturn( TrackerImportStrategy.CREATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( event, TrackerImportStrategy.CREATE );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEvent( reporter, ctx, event );
+        validationHook.validateEvent( report, ctx, event );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -355,11 +358,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEvent( reporter, ctx, event );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( event, TrackerImportStrategy.CREATE_AND_UPDATE );
+
+        validationHook.validateEvent( report, ctx, event );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -371,11 +376,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEvent( reporter, ctx, event );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( event, TrackerImportStrategy.CREATE_AND_UPDATE );
+        when( ctx.getProgramStageInstance( EVENT_UID ) ).thenReturn( getEvent() );
+
+        validationHook.validateEvent( report, ctx, event );
 
         // then
-        assertFalse( reporter.hasErrors() );
+        assertFalse( report.hasErrors() );
     }
 
     @Test
@@ -387,11 +395,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEvent( reporter, ctx, event );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( event, TrackerImportStrategy.CREATE_AND_UPDATE );
+        when( ctx.getProgramStageInstance( SOFT_DELETED_EVENT_UID ) ).thenReturn( getSoftDeletedEvent() );
+
+        validationHook.validateEvent( report, ctx, event );
 
         // then
-        hasError( reporter, E1082, EVENT, event.getUid() );
+        hasError( report, E1082, EVENT, event.getUid() );
     }
 
     @Test
@@ -403,13 +414,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( event ) ).thenReturn( TrackerImportStrategy.CREATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( event, TrackerImportStrategy.CREATE );
+        when( ctx.getProgramStageInstance( EVENT_UID ) ).thenReturn( getEvent() );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEvent( reporter, ctx, event );
+        validationHook.validateEvent( report, ctx, event );
 
         // then
-        hasError( reporter, E1030, EVENT, event.getUid() );
+        hasError( report, E1030, EVENT, event.getUid() );
     }
 
     @Test
@@ -421,13 +433,13 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        when( ctx.getStrategy( event ) ).thenReturn( TrackerImportStrategy.UPDATE );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( event, TrackerImportStrategy.UPDATE );
 
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateEvent( reporter, ctx, event );
+        validationHook.validateEvent( report, ctx, event );
 
         // then
-        hasError( reporter, E1032, EVENT, event.getUid() );
+        hasError( report, E1032, EVENT, event.getUid() );
     }
 
     @Test
@@ -439,12 +451,14 @@ class PreCheckExistenceValidationHookTest
             .build();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateRelationship( reporter, ctx, rel );
+        when( ctx.getBundle() ).thenReturn( bundle );
+        bundle.setStrategy( rel, TrackerImportStrategy.CREATE_AND_UPDATE );
+
+        validationHook.validateRelationship( report, ctx, rel );
 
         // then
-        assertFalse( reporter.hasErrors() );
-        assertThat( reporter.getWarnings(), empty() );
+        assertFalse( report.hasErrors() );
+        assertThat( report.getWarnings(), empty() );
     }
 
     @Test
@@ -454,12 +468,15 @@ class PreCheckExistenceValidationHookTest
         Relationship rel = getPayloadRelationship();
 
         // when
-        TrackerValidationReport reporter = new TrackerValidationReport();
-        validationHook.validateRelationship( reporter, ctx, rel );
+        when( ctx.getRelationship( getPayloadRelationship() ) ).thenReturn( getRelationship() );
+
+        bundle.setStrategy( rel, TrackerImportStrategy.CREATE_AND_UPDATE );
+
+        validationHook.validateRelationship( report, ctx, rel );
 
         // then
-        assertFalse( reporter.hasErrors() );
-        assertTrue( reporter.hasWarning( r -> E4015.equals( r.getWarningCode() ) &&
+        assertFalse( report.hasErrors() );
+        assertTrue( report.hasWarning( r -> E4015.equals( r.getWarningCode() ) &&
             TrackerType.RELATIONSHIP.equals( r.getTrackerType() ) &&
             rel.getUid().equals( r.getUid() ) ) );
     }

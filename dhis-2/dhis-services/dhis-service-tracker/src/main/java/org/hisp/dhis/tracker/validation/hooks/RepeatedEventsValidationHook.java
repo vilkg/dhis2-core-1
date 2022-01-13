@@ -61,7 +61,7 @@ public class RepeatedEventsValidationHook
         Map<Pair<String, String>, List<Event>> eventsByEnrollmentAndNotRepeatableProgramStage = bundle.getEvents()
             .stream()
             .filter( e -> !report.isInvalid( e ) )
-            .filter( e -> !context.getStrategy( e ).isDelete() )
+            .filter( e -> !context.getBundle().getStrategy( e ).isDelete() )
             .filter( e -> {
                 ProgramStage programStage = context.getProgramStage( e.getProgramStage() );
                 return programStage.getProgram().isRegistration() && !programStage.getRepeatable();
@@ -96,7 +96,7 @@ public class RepeatedEventsValidationHook
         ProgramInstance programInstance = context.getProgramInstance( event.getEnrollment() );
         ProgramStage programStage = context.getProgramStage( event.getProgramStage() );
 
-        TrackerImportStrategy strategy = context.getStrategy( event );
+        TrackerImportStrategy strategy = context.getBundle().getStrategy( event );
 
         if ( strategy == TrackerImportStrategy.CREATE && programStage != null && programInstance != null
             && !programStage.getRepeatable()

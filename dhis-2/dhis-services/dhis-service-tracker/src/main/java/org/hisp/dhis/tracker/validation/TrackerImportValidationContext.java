@@ -52,10 +52,8 @@ import org.hisp.dhis.trackedentity.TrackedEntityProgramOwnerOrgUnit;
 import org.hisp.dhis.trackedentity.TrackedEntityType;
 import org.hisp.dhis.trackedentitycomment.TrackedEntityComment;
 import org.hisp.dhis.tracker.TrackerIdentifierParams;
-import org.hisp.dhis.tracker.TrackerImportStrategy;
 import org.hisp.dhis.tracker.bundle.TrackerBundle;
 import org.hisp.dhis.tracker.domain.Relationship;
-import org.hisp.dhis.tracker.domain.TrackerDto;
 import org.hisp.dhis.tracker.preheat.ReferenceTrackerEntity;
 
 import com.google.common.base.Preconditions;
@@ -79,9 +77,9 @@ public class TrackerImportValidationContext
         this.bundle = bundle;
     }
 
-    public TrackerImportStrategy getStrategy( TrackerDto dto )
+    public TrackerBundle getBundle()
     {
-        return bundle.getResolvedStrategyMap().get( dto.getTrackerType() ).get( dto.getUid() );
+        return this.bundle;
     }
 
     public void cacheEventCategoryOptionCombo( String key, CategoryOptionCombo categoryOptionCombo )

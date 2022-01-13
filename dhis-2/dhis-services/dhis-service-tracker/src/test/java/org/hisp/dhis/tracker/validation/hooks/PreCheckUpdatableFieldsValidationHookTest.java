@@ -97,9 +97,9 @@ class PreCheckUpdatableFieldsValidationHookTest
         when( ctx.getBundle() ).thenReturn( bundle );
         when( ctx.getBundle().getImportStrategy() ).thenReturn( TrackerImportStrategy.CREATE_AND_UPDATE );
 
-        when( ctx.getStrategy( any( TrackedEntity.class ) ) ).thenReturn( TrackerImportStrategy.UPDATE );
-        when( ctx.getStrategy( any( Enrollment.class ) ) ).thenReturn( TrackerImportStrategy.UPDATE );
-        when( ctx.getStrategy( any( Event.class ) ) ).thenReturn( TrackerImportStrategy.UPDATE );
+        when( ctx.getBundle().getStrategy( any( TrackedEntity.class ) ) ).thenReturn( TrackerImportStrategy.UPDATE );
+        when( ctx.getBundle().getStrategy( any( Enrollment.class ) ) ).thenReturn( TrackerImportStrategy.UPDATE );
+        when( ctx.getBundle().getStrategy( any( Event.class ) ) ).thenReturn( TrackerImportStrategy.UPDATE );
 
         when( ctx.getTrackedEntityInstance( TRACKED_ENTITY_ID ) ).thenReturn( trackedEntityInstance() );
         when( ctx.getProgramInstance( ENROLLMENT_ID ) ).thenReturn( programInstance() );

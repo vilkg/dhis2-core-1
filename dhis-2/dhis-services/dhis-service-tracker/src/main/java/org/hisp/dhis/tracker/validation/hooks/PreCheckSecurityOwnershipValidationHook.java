@@ -95,7 +95,7 @@ public class PreCheckSecurityOwnershipValidationHook
     public void validateTrackedEntity( TrackerValidationReport report, TrackerImportValidationContext context,
         TrackedEntity trackedEntity )
     {
-        TrackerImportStrategy strategy = context.getStrategy( trackedEntity );
+        TrackerImportStrategy strategy = context.getBundle().getStrategy( trackedEntity );
         TrackerBundle bundle = context.getBundle();
         User user = bundle.getUser();
 
@@ -167,7 +167,7 @@ public class PreCheckSecurityOwnershipValidationHook
     public void validateEnrollment( TrackerValidationReport report, TrackerImportValidationContext context,
         Enrollment enrollment )
     {
-        TrackerImportStrategy strategy = context.getStrategy( enrollment );
+        TrackerImportStrategy strategy = context.getBundle().getStrategy( enrollment );
         TrackerBundle bundle = context.getBundle();
         User user = bundle.getUser();
         Program program = context.getProgram( enrollment.getProgram() );
@@ -212,7 +212,7 @@ public class PreCheckSecurityOwnershipValidationHook
     @Override
     public void validateEvent( TrackerValidationReport report, TrackerImportValidationContext context, Event event )
     {
-        TrackerImportStrategy strategy = context.getStrategy( event );
+        TrackerImportStrategy strategy = context.getBundle().getStrategy( event );
         TrackerBundle bundle = context.getBundle();
         User user = bundle.getUser();
 
@@ -289,7 +289,7 @@ public class PreCheckSecurityOwnershipValidationHook
         ProgramStageInstance programStageInstance,
         String teiUid, OrganisationUnit ownerOrgUnit )
     {
-        TrackerImportStrategy strategy = context.getStrategy( event );
+        TrackerImportStrategy strategy = context.getBundle().getStrategy( event );
         User user = context.getBundle().getUser();
 
         checkNotNull( user, USER_CANT_BE_NULL );

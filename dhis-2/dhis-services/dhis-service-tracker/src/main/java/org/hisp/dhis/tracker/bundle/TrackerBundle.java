@@ -223,4 +223,9 @@ public class TrackerBundle
     {
         return this.getResolvedStrategyMap().get( dto.getTrackerType() ).put( dto.getUid(), strategy );
     }
+
+    public TrackerImportStrategy getStrategy( TrackerDto dto )
+    {
+        return this.getResolvedStrategyMap().get( dto.getTrackerType() ).get( dto.getUid() );
+    }
 }
