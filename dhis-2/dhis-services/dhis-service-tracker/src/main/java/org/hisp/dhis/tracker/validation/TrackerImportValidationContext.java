@@ -67,8 +67,6 @@ public class TrackerImportValidationContext
 {
     private Map<String, CategoryOptionCombo> eventCocCacheMap = new HashMap<>();
 
-    private Map<String, String> cachedEventAOCProgramCC = new HashMap<>();
-
     private TrackerBundle bundle;
 
     public TrackerImportValidationContext( TrackerBundle bundle )
@@ -98,21 +96,6 @@ public class TrackerImportValidationContext
     public CategoryOptionCombo getCachedEventCategoryOptionCombo( String key )
     {
         return eventCocCacheMap.get( key );
-    }
-
-    public void putCachedEventAOCProgramCC( String cacheKey, String value )
-    {
-        cachedEventAOCProgramCC.put( cacheKey, value );
-    }
-
-    public Optional<String> getCachedEventAOCProgramCC( String cacheKey )
-    {
-        String cached = cachedEventAOCProgramCC.get( cacheKey );
-        if ( cached == null )
-        {
-            return Optional.empty();
-        }
-        return Optional.of( cached );
     }
 
     public OrganisationUnit getOrganisationUnit( String id )

@@ -43,13 +43,12 @@ import static org.hisp.dhis.tracker.report.TrackerErrorCode.E4012;
 import static org.hisp.dhis.tracker.validation.hooks.RelationshipValidationUtils.getUidFromRelationshipItem;
 import static org.hisp.dhis.tracker.validation.hooks.RelationshipValidationUtils.relationshipItemValueType;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import lombok.RequiredArgsConstructor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hisp.dhis.category.CategoryCombo;
@@ -82,11 +81,18 @@ import org.springframework.stereotype.Component;
  * @author Morten Svanæs <msvanaes@dhis2.org>
  */
 @Component
-@RequiredArgsConstructor
 public class PreCheckDataRelationsValidationHook
     extends AbstractTrackerDtoValidationHook
 {
     private final CategoryService categoryService;
+
+    private final Map<String, String> cachedEventAOCProgramCC;
+
+    public PreCheckDataRelationsValidationHook( CategoryService categoryService )
+    {
+        this.categoryService = categoryService;
+        this.cachedEventAOCProgramCC = new HashMap<>();
+    }
 
     @Override
     public void validateTrackedEntity( TrackerValidationReport report, TrackerImportValidationContext context,
@@ -310,7 +316,7 @@ public class PreCheckDataRelationsValidationHook
         CategoryCombo categoryCombo = program.getCategoryCombo();
         String cacheKey = attributeCategoryOptions + categoryCombo.getUid();
 
-        Optional<String> cachedEventAOCProgramCC = context.getCachedEventAOCProgramCC( cacheKey );
+        Optional<String> cachedEventAOCProgramCC = getCachedEventAOCProgramCC( cacheKey );
 
         if ( cachedEventAOCProgramCC.isPresent() )
         {
@@ -324,7 +330,7 @@ public class PreCheckDataRelationsValidationHook
             categoryOptionCombo = resolveCategoryOptionCombo( report, context, event,
                 categoryCombo, categoryOptions );
 
-            context.putCachedEventAOCProgramCC( cacheKey,
+            putCachedEventAOCProgramCC( cacheKey,
                 categoryOptionCombo != null ? categoryOptionCombo.getUid() : null );
         }
         return categoryOptionCombo;
@@ -463,6 +469,21 @@ public class PreCheckDataRelationsValidationHook
     public boolean removeOnError()
     {
         return true;
+    }
+
+    private void putCachedEventAOCProgramCC( String cacheKey, String value )
+    {
+        cachedEventAOCProgramCC.put( cacheKey, value );
+    }
+
+    private Optional<String> getCachedEventAOCProgramCC( String cacheKey )
+    {
+        String cached = cachedEventAOCProgramCC.get( cacheKey );
+        if ( cached == null )
+        {
+            return Optional.empty();
+        }
+        return Optional.of( cached );
     }
 
 }
