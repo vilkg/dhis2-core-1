@@ -117,47 +117,47 @@ public class TrackerImportValidationContext
 
     public OrganisationUnit getOrganisationUnit( String id )
     {
-        return bundle.getPreheat().get( OrganisationUnit.class, id );
+        return getBundle().getPreheat().get( OrganisationUnit.class, id );
     }
 
     public TrackedEntityInstance getTrackedEntityInstance( String id )
     {
-        return bundle.getPreheat().getTrackedEntity( bundle.getIdentifier(), id );
+        return getBundle().getPreheat().getTrackedEntity( getBundle().getIdentifier(), id );
     }
 
     public TrackedEntityAttribute getTrackedEntityAttribute( String id )
     {
-        return bundle.getPreheat().get( TrackedEntityAttribute.class, id );
+        return getBundle().getPreheat().get( TrackedEntityAttribute.class, id );
     }
 
     public DataElement getDataElement( String id )
     {
-        return bundle.getPreheat().get( DataElement.class, id );
+        return getBundle().getPreheat().get( DataElement.class, id );
     }
 
     public TrackedEntityType getTrackedEntityType( String id )
     {
-        return bundle.getPreheat().get( TrackedEntityType.class, id );
+        return getBundle().getPreheat().get( TrackedEntityType.class, id );
     }
 
     public RelationshipType getRelationShipType( String id )
     {
-        return bundle.getPreheat().get( RelationshipType.class, id );
+        return getBundle().getPreheat().get( RelationshipType.class, id );
     }
 
     public Program getProgram( String id )
     {
-        return bundle.getPreheat().get( Program.class, id );
+        return getBundle().getPreheat().get( Program.class, id );
     }
 
     public ProgramInstance getProgramInstance( String id )
     {
-        return bundle.getPreheat().getEnrollment( bundle.getIdentifier(), id );
+        return getBundle().getPreheat().getEnrollment( getBundle().getIdentifier(), id );
     }
 
     public OrganisationUnit getOwnerOrganisationUnit( String teiUid, String programUid )
     {
-        Map<String, TrackedEntityProgramOwnerOrgUnit> programOwner = bundle.getPreheat().getProgramOwner()
+        Map<String, TrackedEntityProgramOwnerOrgUnit> programOwner = getBundle().getPreheat().getProgramOwner()
             .get( teiUid );
         if ( programOwner == null || programOwner.get( programUid ) == null )
         {
@@ -171,66 +171,67 @@ public class TrackerImportValidationContext
 
     public boolean programInstanceHasEvents( String programInstanceUid )
     {
-        return bundle.getPreheat().getProgramInstanceWithOneOrMoreNonDeletedEvent().contains( programInstanceUid );
+        return getBundle().getPreheat().getProgramInstanceWithOneOrMoreNonDeletedEvent().contains( programInstanceUid );
     }
 
     public boolean programStageHasEvents( String programStageUid, String enrollmentUid )
     {
-        return bundle.getPreheat().getProgramStageWithEvents().contains( Pair.of( programStageUid, enrollmentUid ) );
+        return getBundle().getPreheat().getProgramStageWithEvents()
+            .contains( Pair.of( programStageUid, enrollmentUid ) );
     }
 
     public Optional<TrackedEntityComment> getNote( String uid )
     {
-        return bundle.getPreheat().getNote( uid );
+        return getBundle().getPreheat().getNote( uid );
     }
 
     public ProgramStage getProgramStage( String id )
     {
-        return bundle.getPreheat().get( ProgramStage.class, id );
+        return getBundle().getPreheat().get( ProgramStage.class, id );
     }
 
     public ProgramStageInstance getProgramStageInstance( String event )
     {
-        return bundle.getPreheat().getEvent( bundle.getIdentifier(), event );
+        return getBundle().getPreheat().getEvent( getBundle().getIdentifier(), event );
     }
 
     public org.hisp.dhis.relationship.Relationship getRelationship( Relationship relationship )
     {
-        return bundle.getPreheat().getRelationship( bundle.getIdentifier(), relationship );
+        return getBundle().getPreheat().getRelationship( getBundle().getIdentifier(), relationship );
     }
 
     public CategoryOptionCombo getCategoryOptionCombo( String id )
     {
-        return bundle.getPreheat().get( CategoryOptionCombo.class, id );
+        return getBundle().getPreheat().get( CategoryOptionCombo.class, id );
     }
 
     public CategoryOption getCategoryOption( String id )
     {
-        return bundle.getPreheat().get( CategoryOption.class, id );
+        return getBundle().getPreheat().get( CategoryOption.class, id );
     }
 
     public boolean usernameExists( String username )
     {
-        return bundle.getPreheat().getUsers().containsKey( username );
+        return getBundle().getPreheat().getUsers().containsKey( username );
     }
 
     public FileResource getFileResource( String id )
     {
-        return bundle.getPreheat().get( FileResource.class, id );
+        return getBundle().getPreheat().get( FileResource.class, id );
     }
 
     public Optional<ReferenceTrackerEntity> getReference( String uid )
     {
-        return bundle.getPreheat().getReference( uid );
+        return getBundle().getPreheat().getReference( uid );
     }
 
     public TrackerIdentifierParams getIdentifiers()
     {
-        return bundle.getPreheat().getIdentifiers();
+        return getBundle().getPreheat().getIdentifiers();
     }
 
     public Map<String, List<String>> getProgramWithOrgUnitsMap()
     {
-        return bundle.getPreheat().getProgramWithOrgUnitsMap();
+        return getBundle().getPreheat().getProgramWithOrgUnitsMap();
     }
 }
