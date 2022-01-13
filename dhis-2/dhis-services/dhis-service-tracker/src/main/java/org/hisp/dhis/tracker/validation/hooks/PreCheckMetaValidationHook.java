@@ -64,7 +64,8 @@ public class PreCheckMetaValidationHook
     public void validateTrackedEntity( TrackerValidationReport report, TrackerImportValidationContext context,
         TrackedEntity tei )
     {
-        OrganisationUnit organisationUnit = context.getOrganisationUnit( tei.getOrgUnit() );
+        OrganisationUnit organisationUnit = context.getBundle().getPreheat().getOrganisationUnit( tei.getOrgUnit(),
+            context.bundle );
         if ( organisationUnit == null )
         {
             Error error = Error.builder()
@@ -93,7 +94,8 @@ public class PreCheckMetaValidationHook
     public void validateEnrollment( TrackerValidationReport report, TrackerImportValidationContext context,
         Enrollment enrollment )
     {
-        OrganisationUnit organisationUnit = context.getOrganisationUnit( enrollment.getOrgUnit() );
+        OrganisationUnit organisationUnit = context.getBundle().getPreheat()
+            .getOrganisationUnit( enrollment.getOrgUnit(), context.bundle );
         report.addErrorIf( () -> organisationUnit == null, () -> Error.builder()
             .uid( ((TrackerDto) enrollment).getUid() )
             .trackerType( ((TrackerDto) enrollment).getTrackerType() )
@@ -121,7 +123,8 @@ public class PreCheckMetaValidationHook
     @Override
     public void validateEvent( TrackerValidationReport report, TrackerImportValidationContext context, Event event )
     {
-        OrganisationUnit organisationUnit = context.getOrganisationUnit( event.getOrgUnit() );
+        OrganisationUnit organisationUnit = context.getBundle().getPreheat().getOrganisationUnit( event.getOrgUnit(),
+            context.bundle );
         report.addErrorIf( () -> organisationUnit == null, () -> Error.builder()
             .uid( ((TrackerDto) event).getUid() )
             .trackerType( ((TrackerDto) event).getTrackerType() )

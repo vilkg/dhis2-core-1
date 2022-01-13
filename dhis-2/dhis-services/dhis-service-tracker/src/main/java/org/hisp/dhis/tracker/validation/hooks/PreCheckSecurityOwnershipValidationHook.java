@@ -108,13 +108,13 @@ public class PreCheckSecurityOwnershipValidationHook
         if ( strategy.isCreate() || strategy.isDelete() )
         {
             checkOrgUnitInCaptureScope( report, context, trackedEntity,
-                context.getOrganisationUnit( trackedEntity.getOrgUnit() ) );
+                context.getBundle().getPreheat().getOrganisationUnit( trackedEntity.getOrgUnit(), context.bundle ) );
         }
         // if its to update trackedEntity, search scope has to be checked
         else
         {
             checkOrgUnitInSearchScope( report, context, trackedEntity,
-                context.getOrganisationUnit( trackedEntity.getOrgUnit() ) );
+                context.getBundle().getPreheat().getOrganisationUnit( trackedEntity.getOrgUnit(), context.bundle ) );
         }
 
         if ( strategy.isDelete() )
@@ -183,7 +183,7 @@ public class PreCheckSecurityOwnershipValidationHook
         if ( program.isWithoutRegistration() || strategy.isCreate() || strategy.isDelete() )
         {
             checkOrgUnitInCaptureScope( report, context, enrollment,
-                context.getOrganisationUnit( enrollment.getOrgUnit() ) );
+                context.getBundle().getPreheat().getOrganisationUnit( enrollment.getOrgUnit(), context.bundle ) );
         }
 
         if ( strategy.isDelete() )
@@ -220,7 +220,8 @@ public class PreCheckSecurityOwnershipValidationHook
         checkNotNull( event, EVENT_CANT_BE_NULL );
         checkNotNull( event.getOrgUnit(), ORGANISATION_UNIT_CANT_BE_NULL );
 
-        OrganisationUnit organisationUnit = context.getOrganisationUnit( event.getOrgUnit() );
+        OrganisationUnit organisationUnit = context.getBundle().getPreheat().getOrganisationUnit( event.getOrgUnit(),
+            context.bundle );
         ProgramStage programStage = context.getProgramStage( event.getProgramStage() );
         Program program = context.getProgram( event.getProgram() );
 

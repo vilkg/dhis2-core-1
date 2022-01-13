@@ -87,7 +87,8 @@ public class TrackedEntityAttributeValidationHook extends AttributeValidationHoo
     {
         TrackedEntityType trackedEntityType = context.getTrackedEntityType( trackedEntity.getTrackedEntityType() );
         TrackedEntityInstance tei = context.getTrackedEntityInstance( trackedEntity.getTrackedEntity() );
-        OrganisationUnit organisationUnit = context.getOrganisationUnit( trackedEntity.getOrgUnit() );
+        OrganisationUnit organisationUnit = context.getBundle().getPreheat()
+            .getOrganisationUnit( trackedEntity.getOrgUnit(), context.bundle );
 
         validateMandatoryAttributes( report, trackedEntity, trackedEntityType );
         validateAttributes( report, context, trackedEntity, tei, organisationUnit, trackedEntityType );

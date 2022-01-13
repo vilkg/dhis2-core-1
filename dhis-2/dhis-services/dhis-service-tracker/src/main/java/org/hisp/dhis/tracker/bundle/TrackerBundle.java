@@ -115,7 +115,7 @@ public class TrackerBundle
      * Preheat bundle for all attached objects (or null if preheater not run
      * yet).
      */
-    private TrackerPreheat preheat;
+    public TrackerPreheat preheat;
 
     /**
      * Tracked entities to import.
@@ -228,4 +228,5 @@ public class TrackerBundle
     {
         return this.getResolvedStrategyMap().get( dto.getTrackerType() ).get( dto.getUid() );
     }
+
 }

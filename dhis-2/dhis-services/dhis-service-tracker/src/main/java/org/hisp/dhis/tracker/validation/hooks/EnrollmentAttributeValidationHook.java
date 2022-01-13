@@ -84,8 +84,8 @@ public class EnrollmentAttributeValidationHook extends AttributeValidationHook
 
         TrackedEntityInstance tei = context.getTrackedEntityInstance( enrollment.getTrackedEntity() );
 
-        OrganisationUnit orgUnit = context
-            .getOrganisationUnit( getOrgUnitUidFromTei( context, enrollment.getTrackedEntity() ) );
+        OrganisationUnit orgUnit = context.getBundle().getPreheat()
+            .getOrganisationUnit( getOrgUnitUidFromTei( context, enrollment.getTrackedEntity() ), context.bundle );
 
         Map<String, String> attributeValueMap = Maps.newHashMap();
 

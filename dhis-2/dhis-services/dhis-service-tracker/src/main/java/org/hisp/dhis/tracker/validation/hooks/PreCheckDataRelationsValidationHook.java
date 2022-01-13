@@ -106,7 +106,8 @@ public class PreCheckDataRelationsValidationHook
         Enrollment enrollment )
     {
         Program program = context.getProgram( enrollment.getProgram() );
-        OrganisationUnit organisationUnit = context.getOrganisationUnit( enrollment.getOrgUnit() );
+        OrganisationUnit organisationUnit = context.getBundle().getPreheat()
+            .getOrganisationUnit( enrollment.getOrgUnit(), context.bundle );
 
         report.addErrorIf( () -> !program.isRegistration(), () -> Error.builder()
             .uid( ((TrackerDto) enrollment).getUid() )
@@ -146,7 +147,8 @@ public class PreCheckDataRelationsValidationHook
     public void validateEvent( TrackerValidationReport report, TrackerImportValidationContext context, Event event )
     {
         ProgramStage programStage = context.getProgramStage( event.getProgramStage() );
-        OrganisationUnit organisationUnit = context.getOrganisationUnit( event.getOrgUnit() );
+        OrganisationUnit organisationUnit = context.getBundle().getPreheat().getOrganisationUnit( event.getOrgUnit(),
+            context.bundle );
         Program program = context.getProgram( event.getProgram() );
 
         if ( !program.getUid().equals( programStage.getProgram().getUid() ) )

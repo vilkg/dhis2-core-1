@@ -143,11 +143,12 @@ class PreCheckDataRelationsValidationHookTest extends DhisConvenienceTest
 
         organisationUnit = createOrganisationUnit( 'A' );
         organisationUnit.setUid( ORG_UNIT_ID );
-        when( ctx.getOrganisationUnit( ORG_UNIT_ID ) ).thenReturn( organisationUnit );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_ID, ctx.bundle ) ).thenReturn( organisationUnit );
 
         anotherOrganisationUnit = createOrganisationUnit( 'B' );
         anotherOrganisationUnit.setUid( ANOTHER_ORG_UNIT_ID );
-        when( ctx.getOrganisationUnit( ANOTHER_ORG_UNIT_ID ) ).thenReturn( anotherOrganisationUnit );
+        when( ctx.bundle.preheat.getOrganisationUnit( ANOTHER_ORG_UNIT_ID, ctx.bundle ) )
+            .thenReturn( anotherOrganisationUnit );
 
         trackedEntityType = createTrackedEntityType( 'A' );
         trackedEntityType.setUid( TEI_TYPE_ID );

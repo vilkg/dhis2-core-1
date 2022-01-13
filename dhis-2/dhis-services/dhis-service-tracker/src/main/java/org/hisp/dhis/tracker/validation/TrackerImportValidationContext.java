@@ -67,7 +67,7 @@ public class TrackerImportValidationContext
 {
     private Map<String, CategoryOptionCombo> eventCocCacheMap = new HashMap<>();
 
-    private TrackerBundle bundle;
+    public TrackerBundle bundle;
 
     public TrackerImportValidationContext( TrackerBundle bundle )
     {
@@ -96,11 +96,6 @@ public class TrackerImportValidationContext
     public CategoryOptionCombo getCachedEventCategoryOptionCombo( String key )
     {
         return eventCocCacheMap.get( key );
-    }
-
-    public OrganisationUnit getOrganisationUnit( String id )
-    {
-        return getBundle().getPreheat().get( OrganisationUnit.class, id );
     }
 
     public TrackedEntityInstance getTrackedEntityInstance( String id )

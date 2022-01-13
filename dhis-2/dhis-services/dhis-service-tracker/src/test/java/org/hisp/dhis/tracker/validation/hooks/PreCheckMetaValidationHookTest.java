@@ -105,7 +105,7 @@ class PreCheckMetaValidationHookTest
         TrackerValidationReport reporter = new TrackerValidationReport();
 
         // when
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getTrackedEntityType( TRACKED_ENTITY_TYPE_UID ) ).thenReturn( new TrackedEntityType() );
 
         validatorToTest.validateTrackedEntity( reporter, ctx, tei );
@@ -140,7 +140,7 @@ class PreCheckMetaValidationHookTest
         TrackerValidationReport reporter = new TrackerValidationReport();
 
         // when
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
 
         validatorToTest.validateTrackedEntity( reporter, ctx, tei );
 
@@ -157,7 +157,7 @@ class PreCheckMetaValidationHookTest
         TrackerValidationReport reporter = new TrackerValidationReport();
 
         // when
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getTrackedEntityInstance( TRACKED_ENTITY_UID ) ).thenReturn( new TrackedEntityInstance() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
 
@@ -178,7 +178,7 @@ class PreCheckMetaValidationHookTest
         // when
         when( ctx.getReference( TRACKED_ENTITY_UID ) )
             .thenReturn( Optional.of( new ReferenceTrackerEntity( "", "" ) ) );
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
 
         validatorToTest.validateEnrollment( reporter, ctx, enrollment );
@@ -214,7 +214,7 @@ class PreCheckMetaValidationHookTest
         TrackerValidationReport reporter = new TrackerValidationReport();
 
         // when
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
 
         validatorToTest.validateEnrollment( reporter, ctx, enrollment );
@@ -232,7 +232,7 @@ class PreCheckMetaValidationHookTest
         TrackerValidationReport reporter = new TrackerValidationReport();
 
         // when
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getTrackedEntityInstance( TRACKED_ENTITY_UID ) ).thenReturn( new TrackedEntityInstance() );
 
         validatorToTest.validateEnrollment( reporter, ctx, enrollment );
@@ -250,7 +250,7 @@ class PreCheckMetaValidationHookTest
         TrackerValidationReport reporter = new TrackerValidationReport();
 
         // when
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
         when( ctx.getProgramStage( PROGRAM_STAGE_UID ) ).thenReturn( new ProgramStage() );
 
@@ -269,7 +269,7 @@ class PreCheckMetaValidationHookTest
         TrackerValidationReport reporter = new TrackerValidationReport();
 
         // when
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgramStage( PROGRAM_STAGE_UID ) ).thenReturn( new ProgramStage() );
 
         validatorToTest.validateEvent( reporter, ctx, event );
@@ -287,7 +287,7 @@ class PreCheckMetaValidationHookTest
         TrackerValidationReport reporter = new TrackerValidationReport();
 
         // when
-        when( ctx.getOrganisationUnit( ORG_UNIT_UID ) ).thenReturn( new OrganisationUnit() );
+        when( ctx.bundle.preheat.getOrganisationUnit( ORG_UNIT_UID, ctx.bundle ) ).thenReturn( new OrganisationUnit() );
         when( ctx.getProgram( PROGRAM_UID ) ).thenReturn( new Program() );
 
         validatorToTest.validateEvent( reporter, ctx, event );
