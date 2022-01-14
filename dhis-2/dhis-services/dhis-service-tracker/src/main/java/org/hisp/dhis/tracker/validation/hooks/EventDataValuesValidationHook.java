@@ -34,6 +34,7 @@ import static org.hisp.dhis.tracker.report.TrackerErrorCode.E1084;
 import static org.hisp.dhis.tracker.report.TrackerErrorCode.E1303;
 import static org.hisp.dhis.tracker.validation.hooks.ValidationUtils.needsToValidateDataValues;
 import static org.hisp.dhis.tracker.validation.hooks.ValidationUtils.validateMandatoryDataValue;
+import static org.hisp.dhis.tracker.validation.hooks.ValidationUtils.validateOptionSet;
 
 import java.util.List;
 import java.util.Optional;

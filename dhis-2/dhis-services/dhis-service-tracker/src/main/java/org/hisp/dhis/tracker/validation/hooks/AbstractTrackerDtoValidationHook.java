@@ -27,18 +27,11 @@
  */
 package org.hisp.dhis.tracker.validation.hooks;
 
-import static org.hisp.dhis.tracker.report.TrackerErrorCode.E1125;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
-import org.hisp.dhis.common.ValueTypedDimensionalItemObject;
-import org.hisp.dhis.option.Option;
 import org.hisp.dhis.tracker.TrackerImportStrategy;
 import org.hisp.dhis.tracker.TrackerType;
 import org.hisp.dhis.tracker.bundle.TrackerBundle;
@@ -116,20 +109,6 @@ public abstract class AbstractTrackerDtoValidationHook
      */
     public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity tei )
     {
-    }
-
-    protected <T extends ValueTypedDimensionalItemObject> void validateOptionSet( ValidationErrorReporter reporter,
-        TrackerDto dto,
-        T optionalObject, String value )
-    {
-        Optional.ofNullable( optionalObject.getOptionSet() )
-            .ifPresent( optionSet -> reporter.addErrorIf(
-                () -> optionSet.getOptions().stream().filter( Objects::nonNull )
-                    .noneMatch( o -> o.getCode().equalsIgnoreCase( value ) ),
-                dto, E1125, value,
-                optionalObject.getUid(), optionalObject.getClass().getSimpleName(),
-                optionalObject.getOptionSet().getOptions().stream().filter( Objects::nonNull ).map( Option::getCode )
-                    .collect( Collectors.joining( "," ) ) ) );
     }
 
     /**
