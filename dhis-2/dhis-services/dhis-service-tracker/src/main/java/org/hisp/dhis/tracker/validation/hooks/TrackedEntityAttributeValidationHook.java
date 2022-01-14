@@ -160,7 +160,7 @@ public class TrackedEntityAttributeValidationHook extends AttributeValidationHoo
 
             validateAttributeValue( reporter, trackedEntity, tea, attribute.getValue() );
             validateAttrValueType( reporter, trackedEntity, attribute, tea );
-            validateOptionSet( reporter, trackedEntity, tea,
+            ValidationUtils.validateOptionSet( reporter, trackedEntity, tea,
                 attribute.getValue() );
 
             validateAttributeUniqueness( reporter, trackedEntity, attribute.getValue(), tea, tei, orgUnit );

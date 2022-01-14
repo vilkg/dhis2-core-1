@@ -100,7 +100,7 @@ public class EnrollmentAttributeValidationHook extends AttributeValidationHook
                 attributeValueMap.put( attribute.getAttribute(), attribute.getValue() );
 
                 validateAttrValueType( reporter, enrollment, attribute, teAttribute );
-                validateOptionSet( reporter, enrollment, teAttribute,
+                ValidationUtils.validateOptionSet( reporter, enrollment, teAttribute,
                     attribute.getValue() );
 
                 validateAttributeUniqueness( reporter,
