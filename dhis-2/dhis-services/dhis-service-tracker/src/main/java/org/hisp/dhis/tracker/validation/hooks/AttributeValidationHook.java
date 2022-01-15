@@ -46,12 +46,13 @@ import org.hisp.dhis.tracker.report.TrackerErrorCode;
 import org.hisp.dhis.tracker.report.TrackerErrorReport;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
+import org.hisp.dhis.tracker.validation.TrackerValidationHook;
 import org.hisp.dhis.tracker.validation.service.attribute.TrackedAttributeValidationService;
 
 /**
  * @author Luciano Fiandesio
  */
-public abstract class AttributeValidationHook extends AbstractTrackerDtoValidationHook
+public abstract class AttributeValidationHook implements TrackerValidationHook
 {
 
     private final TrackedAttributeValidationService teAttrService;

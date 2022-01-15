@@ -35,12 +35,12 @@ import java.util.Optional;
 import org.hisp.dhis.common.CodeGenerator;
 import org.hisp.dhis.tracker.domain.Event;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.TrackerValidationHook;
 import org.hisp.dhis.user.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AssignedUserValidationHook
-    extends AbstractTrackerDtoValidationHook
+public class AssignedUserValidationHook implements TrackerValidationHook
 {
     @Override
     public void validateEvent( ValidationErrorReporter reporter, Event event )

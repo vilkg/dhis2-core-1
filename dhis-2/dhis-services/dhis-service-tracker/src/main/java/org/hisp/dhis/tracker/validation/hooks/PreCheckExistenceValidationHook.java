@@ -48,14 +48,14 @@ import org.hisp.dhis.tracker.domain.Relationship;
 import org.hisp.dhis.tracker.domain.TrackedEntity;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
+import org.hisp.dhis.tracker.validation.TrackerValidationHook;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Morten Svanæs <msvanaes@dhis2.org>
  */
 @Component
-public class PreCheckExistenceValidationHook
-    extends AbstractTrackerDtoValidationHook
+public class PreCheckExistenceValidationHook implements TrackerValidationHook
 {
     @Override
     public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity trackedEntity )

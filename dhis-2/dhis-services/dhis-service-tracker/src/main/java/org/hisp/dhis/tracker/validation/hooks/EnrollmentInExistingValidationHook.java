@@ -30,26 +30,33 @@ package org.hisp.dhis.tracker.validation.hooks;
 import static com.google.api.client.util.Preconditions.checkNotNull;
 import static org.hisp.dhis.tracker.report.TrackerErrorCode.E1015;
 import static org.hisp.dhis.tracker.report.TrackerErrorCode.E1016;
-import static org.hisp.dhis.tracker.validation.hooks.TrackerImporterAssertErrors.*;
+import static org.hisp.dhis.tracker.validation.hooks.TrackerImporterAssertErrors.ENROLLMENT_CANT_BE_NULL;
+import static org.hisp.dhis.tracker.validation.hooks.TrackerImporterAssertErrors.PROGRAM_CANT_BE_NULL;
+import static org.hisp.dhis.tracker.validation.hooks.TrackerImporterAssertErrors.TRACKED_ENTITY_INSTANCE_CANT_BE_NULL;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.hisp.dhis.program.*;
+import org.hisp.dhis.program.Program;
+import org.hisp.dhis.program.ProgramInstance;
+import org.hisp.dhis.program.ProgramStatus;
 import org.hisp.dhis.trackedentity.TrackedEntityInstance;
 import org.hisp.dhis.tracker.domain.Enrollment;
 import org.hisp.dhis.tracker.domain.EnrollmentStatus;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
+import org.hisp.dhis.tracker.validation.TrackerValidationHook;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Morten Svanæs <msvanaes@dhis2.org>
  */
 @Component
-public class EnrollmentInExistingValidationHook
-    extends AbstractTrackerDtoValidationHook
+public class EnrollmentInExistingValidationHook implements TrackerValidationHook
 {
     @Override
     public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )

@@ -27,12 +27,79 @@
  */
 package org.hisp.dhis.tracker.validation;
 
+import org.hisp.dhis.tracker.TrackerImportStrategy;
+import org.hisp.dhis.tracker.domain.Enrollment;
+import org.hisp.dhis.tracker.domain.Event;
+import org.hisp.dhis.tracker.domain.Relationship;
+import org.hisp.dhis.tracker.domain.TrackedEntity;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 
 /**
- * @author Morten Olav Hansen <mortenoh@gmail.com>
+ * @author Morten Svanæs <msvanaes@dhis2.org>
  */
 public interface TrackerValidationHook
 {
-    void validate( ValidationErrorReporter report, TrackerImportValidationContext bundle );
+    default void validate( ValidationErrorReporter reporter, TrackerImportValidationContext context )
+    {
+    }
+
+    /**
+     * Template method Must be implemented if dtoTypeClass == Event or
+     * dtoTypeClass == null
+     *
+     * @param reporter ValidationErrorReporter instance
+     * @param event entity to validate
+     */
+    default void validateEvent( ValidationErrorReporter reporter, Event event )
+    {
+    }
+
+    /**
+     * Template method Must be implemented if dtoTypeClass == Enrollment or
+     * dtoTypeClass == null
+     *
+     * @param reporter ValidationErrorReporter instance
+     * @param enrollment entity to validate
+     */
+    default void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
+    {
+    }
+
+    /**
+     * Template method Must be implemented if dtoTypeClass == Relationship or
+     * dtoTypeClass == null
+     *
+     * @param reporter ValidationErrorReporter instance
+     * @param relationship entity to validate
+     */
+    default void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
+    {
+    }
+
+    /**
+     * Template method Must be implemented if dtoTypeClass == TrackedEntity or
+     * dtoTypeClass == null
+     *
+     * @param reporter ValidationErrorReporter instance
+     * @param tei entity to validate
+     */
+    default void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity tei )
+    {
+    }
+
+    default boolean needsToRun( TrackerImportStrategy strategy )
+    {
+        return strategy != TrackerImportStrategy.DELETE;
+    }
+
+    /**
+     * Signal the implementing Validator hook that, upon validation error, the
+     * Tracker entity under validation must be removed from the payload.
+     *
+     */
+    default boolean removeOnError()
+    {
+        return false;
+    }
+
 }

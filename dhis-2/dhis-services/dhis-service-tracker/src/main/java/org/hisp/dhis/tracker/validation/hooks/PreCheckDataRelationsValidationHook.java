@@ -74,6 +74,7 @@ import org.hisp.dhis.tracker.preheat.TrackerPreheat;
 import org.hisp.dhis.tracker.report.TrackerErrorCode;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
+import org.hisp.dhis.tracker.validation.TrackerValidationHook;
 import org.springframework.stereotype.Component;
 
 /**
@@ -81,8 +82,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class PreCheckDataRelationsValidationHook
-    extends AbstractTrackerDtoValidationHook
+public class PreCheckDataRelationsValidationHook implements TrackerValidationHook
 {
     private final CategoryService categoryService;
 

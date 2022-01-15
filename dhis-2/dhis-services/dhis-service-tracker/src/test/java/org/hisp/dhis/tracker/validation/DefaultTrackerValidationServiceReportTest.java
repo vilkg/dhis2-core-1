@@ -52,7 +52,6 @@ import org.hisp.dhis.tracker.report.TrackerErrorReport;
 import org.hisp.dhis.tracker.report.TrackerValidationReport;
 import org.hisp.dhis.tracker.report.TrackerWarningReport;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
-import org.hisp.dhis.tracker.validation.hooks.AbstractTrackerDtoValidationHook;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +59,7 @@ class DefaultTrackerValidationServiceReportTest
 {
 
     @Builder
-    private static class ValidationHook extends AbstractTrackerDtoValidationHook
+    private static class ValidationHook implements TrackerValidationHook
     {
         boolean removeOnError;
 

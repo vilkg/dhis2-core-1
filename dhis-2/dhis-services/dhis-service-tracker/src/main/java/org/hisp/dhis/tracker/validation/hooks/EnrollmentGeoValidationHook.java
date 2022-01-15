@@ -33,14 +33,14 @@ import org.hisp.dhis.program.Program;
 import org.hisp.dhis.tracker.domain.Enrollment;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
+import org.hisp.dhis.tracker.validation.TrackerValidationHook;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Morten Svanæs <msvanaes@dhis2.org>
  */
 @Component
-public class EnrollmentGeoValidationHook
-    extends AbstractTrackerDtoValidationHook
+public class EnrollmentGeoValidationHook implements TrackerValidationHook
 {
     @Override
     public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )

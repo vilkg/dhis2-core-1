@@ -27,7 +27,9 @@
  */
 package org.hisp.dhis.tracker.validation;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.hisp.dhis.commons.timer.Timer;
 import org.hisp.dhis.tracker.ValidationMode;
 import org.hisp.dhis.tracker.bundle.TrackerBundle;
+import org.hisp.dhis.tracker.domain.Enrollment;
+import org.hisp.dhis.tracker.domain.Event;
+import org.hisp.dhis.tracker.domain.Relationship;
+import org.hisp.dhis.tracker.domain.TrackedEntity;
+import org.hisp.dhis.tracker.domain.TrackerDto;
 import org.hisp.dhis.tracker.report.Timing;
 import org.hisp.dhis.tracker.report.TrackerValidationReport;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
@@ -95,7 +102,7 @@ public class DefaultTrackerValidationService
             {
                 Timer hookTimer = Timer.startTimer();
 
-                hook.validate( reporter, context );
+                validate( reporter, context, hook );
 
                 validationReport.addTiming( new Timing(
                     hook.getClass().getName(),
@@ -113,6 +120,59 @@ public class DefaultTrackerValidationService
         removeInvalidObjects( bundle, reporter );
 
         return validationReport;
+    }
+
+    /**
+     * Delegating validate method, this delegates validation to the different
+     * implementing hooks.
+     *
+     * @param context validation context
+     */
+    private void validate( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        TrackerValidationHook hook )
+    {
+        TrackerBundle bundle = context.getBundle();
+        /*
+         * Validate the bundle, by passing each Tracker entities collection to
+         * the validation hooks. If a validation hook reports errors and has
+         * 'removeOnError=true' the Tracker entity under validation will be
+         * removed from the bundle.
+         */
+
+        hook.validate( reporter, context );
+        validateTrackerDtos( reporter, context, hook,
+            ( r, dto ) -> hook.validateTrackedEntity( r, (TrackedEntity) dto ), bundle.getTrackedEntities() );
+        validateTrackerDtos( reporter, context, hook, ( r, dto ) -> hook.validateEnrollment( r, (Enrollment) dto ),
+            bundle.getEnrollments() );
+        validateTrackerDtos( reporter, context, hook, ( r, dto ) -> hook.validateEvent( r, (Event) dto ),
+            bundle.getEvents() );
+        validateTrackerDtos( reporter, context, hook, ( r, dto ) -> hook.validateRelationship( r, (Relationship) dto ),
+            bundle.getRelationships() );
+    }
+
+    private void validateTrackerDtos( ValidationErrorReporter reporter, TrackerImportValidationContext context,
+        TrackerValidationHook hook,
+        BiConsumer<ValidationErrorReporter, TrackerDto> validation,
+        List<? extends TrackerDto> dtos )
+    {
+        Iterator<? extends TrackerDto> iter = dtos.iterator();
+        while ( iter.hasNext() )
+        {
+            TrackerDto dto = iter.next();
+            if ( hook.needsToRun( context.getStrategy( dto ) ) )
+            {
+                validation.accept( reporter, dto );
+                if ( hook.removeOnError() && didNotPassValidation( reporter, dto.getUid() ) )
+                {
+                    iter.remove();
+                }
+            }
+        }
+    }
+
+    private boolean didNotPassValidation( ValidationErrorReporter reporter, String uid )
+    {
+        return reporter.getReportList().stream().anyMatch( r -> r.getUid().equals( uid ) );
     }
 
     private void removeInvalidObjects( TrackerBundle bundle, ValidationErrorReporter reporter )

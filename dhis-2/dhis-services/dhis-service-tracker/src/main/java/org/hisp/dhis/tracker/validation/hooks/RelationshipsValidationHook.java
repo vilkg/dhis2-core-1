@@ -54,14 +54,14 @@ import org.hisp.dhis.tracker.report.TrackerErrorCode;
 import org.hisp.dhis.tracker.report.TrackerErrorReport;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
+import org.hisp.dhis.tracker.validation.TrackerValidationHook;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Enrico Colasante
  */
 @Component
-public class RelationshipsValidationHook
-    extends AbstractTrackerDtoValidationHook
+public class RelationshipsValidationHook implements TrackerValidationHook
 {
 
     public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )

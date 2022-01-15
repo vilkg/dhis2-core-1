@@ -52,14 +52,14 @@ import org.hisp.dhis.tracker.domain.Event;
 import org.hisp.dhis.tracker.report.TrackerErrorCode;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
+import org.hisp.dhis.tracker.validation.TrackerValidationHook;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Enrico Colasante
  */
 @Component
-public class EventDataValuesValidationHook
-    extends AbstractTrackerDtoValidationHook
+public class EventDataValuesValidationHook implements TrackerValidationHook
 {
     @Override
     public void validateEvent( ValidationErrorReporter reporter, Event event )
