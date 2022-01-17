@@ -25,37 +25,27 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.tracker.validation.hooks;
+package org.hisp.dhis.tracker.validation;
 
-import static com.google.api.client.util.Preconditions.checkNotNull;
-
-import org.hisp.dhis.program.ProgramStage;
-import org.hisp.dhis.tracker.domain.Event;
+import org.hisp.dhis.tracker.TrackerImportStrategy;
+import org.hisp.dhis.tracker.domain.Enrollment;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
-import org.hisp.dhis.tracker.validation.EventValidationHook;
-import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
-import org.springframework.stereotype.Component;
 
-/**
- * @author Morten Svanæs <msvanaes@dhis2.org>
- */
-@Component
-public class EventGeoValidationHook
-    extends AbstractTrackerDtoValidationHook implements EventValidationHook
+public interface EnrollmentValidationHook
 {
-    @Override
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
+    void validateEnrollment( ValidationErrorReporter report, Enrollment enrollment);
+
+    default boolean needsToRun( TrackerImportStrategy strategy )
     {
-        TrackerImportValidationContext context = reporter.getValidationContext();
+        return strategy != TrackerImportStrategy.DELETE;
+    }
 
-        ProgramStage programStage = context.getProgramStage( event.getProgramStage() );
-        checkNotNull( programStage, TrackerImporterAssertErrors.PROGRAM_STAGE_CANT_BE_NULL );
-
-        if ( event.getGeometry() != null )
-        {
-            ValidationUtils.validateGeometry( reporter, event,
-                event.getGeometry(),
-                programStage.getFeatureType() );
-        }
+    /**
+     * Signal the implementing Validator hook that, upon validation error, the
+     * enrollment under validation must be removed from the payload.
+     *
+     */
+    default boolean removeOnError() {
+        return false;
     }
 }

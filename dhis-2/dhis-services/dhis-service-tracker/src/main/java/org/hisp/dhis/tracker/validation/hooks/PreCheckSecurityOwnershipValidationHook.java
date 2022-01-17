@@ -63,12 +63,14 @@ import org.hisp.dhis.tracker.TrackerType;
 import org.hisp.dhis.tracker.bundle.TrackerBundle;
 import org.hisp.dhis.tracker.domain.Enrollment;
 import org.hisp.dhis.tracker.domain.Event;
-import org.hisp.dhis.tracker.domain.Relationship;
 import org.hisp.dhis.tracker.domain.TrackedEntity;
 import org.hisp.dhis.tracker.domain.TrackerDto;
 import org.hisp.dhis.tracker.report.TrackerErrorCode;
 import org.hisp.dhis.tracker.report.TrackerErrorReport;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.EnrollmentValidationHook;
+import org.hisp.dhis.tracker.validation.EventValidationHook;
+import org.hisp.dhis.tracker.validation.TrackedEntityValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.hisp.dhis.user.User;
 import org.springframework.stereotype.Component;
@@ -80,7 +82,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PreCheckSecurityOwnershipValidationHook
-    extends AbstractTrackerDtoValidationHook
+    extends AbstractTrackerDtoValidationHook implements TrackedEntityValidationHook, EnrollmentValidationHook, EventValidationHook
 {
     @NonNull
     private final AclService aclService;
@@ -254,12 +256,6 @@ public class PreCheckSecurityOwnershipValidationHook
                 ownerOrgUnit,
                 program, event.isCreatableInSearchScope() );
         }
-    }
-
-    @Override
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
-    {
-        // NOTHING TO DO HERE
     }
 
     private void validateCreateEvent( ValidationErrorReporter reporter, Event event, User actingUser,

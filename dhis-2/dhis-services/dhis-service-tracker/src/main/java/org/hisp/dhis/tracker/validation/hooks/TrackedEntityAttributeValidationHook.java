@@ -59,6 +59,7 @@ import org.hisp.dhis.tracker.domain.Attribute;
 import org.hisp.dhis.tracker.domain.TrackedEntity;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 import org.hisp.dhis.tracker.util.Constant;
+import org.hisp.dhis.tracker.validation.TrackedEntityValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.hisp.dhis.tracker.validation.service.attribute.TrackedAttributeValidationService;
 import org.springframework.stereotype.Component;
@@ -68,6 +69,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TrackedEntityAttributeValidationHook extends AttributeValidationHook
+    implements TrackedEntityValidationHook
 {
     private final DhisConfigurationProvider dhisConfigurationProvider;
 

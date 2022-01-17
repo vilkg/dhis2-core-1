@@ -36,6 +36,7 @@ import org.hisp.dhis.tracker.domain.Enrollment;
 import org.hisp.dhis.tracker.programrule.ProgramRuleIssue;
 import org.hisp.dhis.tracker.programrule.RuleActionImplementer;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.EnrollmentValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,7 +48,7 @@ import com.google.common.collect.Lists;
  */
 @Component
 public class EnrollmentRuleValidationHook
-    extends AbstractTrackerDtoValidationHook
+    extends AbstractTrackerDtoValidationHook implements EnrollmentValidationHook
 {
     private List<RuleActionImplementer> validators;
 

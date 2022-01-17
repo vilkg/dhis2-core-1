@@ -27,129 +27,19 @@
  */
 package org.hisp.dhis.tracker.validation.hooks;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-
 import org.hisp.dhis.tracker.TrackerImportStrategy;
-import org.hisp.dhis.tracker.TrackerType;
-import org.hisp.dhis.tracker.bundle.TrackerBundle;
-import org.hisp.dhis.tracker.domain.Enrollment;
-import org.hisp.dhis.tracker.domain.Event;
-import org.hisp.dhis.tracker.domain.Relationship;
-import org.hisp.dhis.tracker.domain.TrackedEntity;
-import org.hisp.dhis.tracker.domain.TrackerDto;
-import org.hisp.dhis.tracker.report.ValidationErrorReporter;
-import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
-import org.hisp.dhis.tracker.validation.TrackerValidationHook;
-
-import com.google.common.collect.ImmutableMap;
 
 /**
  * @author Morten Svanæs <msvanaes@dhis2.org>
  */
 public abstract class AbstractTrackerDtoValidationHook
-    implements TrackerValidationHook
 {
-    private final Map<TrackerType, BiConsumer<ValidationErrorReporter, TrackerDto>> validationMap = ImmutableMap
-        .<TrackerType, BiConsumer<ValidationErrorReporter, TrackerDto>> builder()
-        .put( TrackerType.TRACKED_ENTITY, (( report, dto ) -> validateTrackedEntity( report, (TrackedEntity) dto )) )
-        .put( TrackerType.ENROLLMENT, (( report, dto ) -> validateEnrollment( report, (Enrollment) dto )) )
-        .put( TrackerType.EVENT, (( report, dto ) -> validateEvent( report, (Event) dto )) )
-        .put( TrackerType.RELATIONSHIP, (( report, dto ) -> validateRelationship( report, (Relationship) dto )) )
-        .build();
 
     /**
      * This constructor is used by the PreCheck* hooks
      */
     public AbstractTrackerDtoValidationHook()
     {
-    }
-
-    /**
-     * Template method Must be implemented if dtoTypeClass == Event or
-     * dtoTypeClass == null
-     *
-     * @param reporter ValidationErrorReporter instance
-     * @param event entity to validate
-     */
-    public void validateEvent( ValidationErrorReporter reporter, Event event )
-    {
-    }
-
-    /**
-     * Template method Must be implemented if dtoTypeClass == Enrollment or
-     * dtoTypeClass == null
-     *
-     * @param reporter ValidationErrorReporter instance
-     * @param enrollment entity to validate
-     */
-    public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
-    {
-    }
-
-    /**
-     * Template method Must be implemented if dtoTypeClass == Relationship or
-     * dtoTypeClass == null
-     *
-     * @param reporter ValidationErrorReporter instance
-     * @param relationship entity to validate
-     */
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
-    {
-    }
-
-    /**
-     * Template method Must be implemented if dtoTypeClass == TrackedEntity or
-     * dtoTypeClass == null
-     *
-     * @param reporter ValidationErrorReporter instance
-     * @param tei entity to validate
-     */
-    public void validateTrackedEntity( ValidationErrorReporter reporter, TrackedEntity tei )
-    {
-    }
-
-    /**
-     * Delegating validate method, this delegates validation to the different
-     * implementing hooks.
-     *
-     * @param context validation context
-     */
-    @Override
-    public void validate( ValidationErrorReporter reporter, TrackerImportValidationContext context )
-    {
-        TrackerBundle bundle = context.getBundle();
-        /*
-         * Validate the bundle, by passing each Tracker entities collection to
-         * the validation hooks. If a validation hook reports errors and has
-         * 'removeOnError=true' the Tracker entity under validation will be
-         * removed from the bundle.
-         */
-
-        validateTrackerDtos( reporter, context, bundle.getTrackedEntities() );
-        validateTrackerDtos( reporter, context, bundle.getEnrollments() );
-        validateTrackerDtos( reporter, context, bundle.getEvents() );
-        validateTrackerDtos( reporter, context, bundle.getRelationships() );
-    }
-
-    private void validateTrackerDtos( ValidationErrorReporter reporter, TrackerImportValidationContext context,
-        List<? extends TrackerDto> dtos )
-    {
-        Iterator<? extends TrackerDto> iter = dtos.iterator();
-        while ( iter.hasNext() )
-        {
-            TrackerDto dto = iter.next();
-            if ( needsToRun( context.getStrategy( dto ) ) )
-            {
-                validationMap.get( dto.getTrackerType() ).accept( reporter, dto );
-                if ( removeOnError() && didNotPassValidation( reporter, dto.getUid() ) )
-                {
-                    iter.remove();
-                }
-            }
-        }
     }
 
     public boolean needsToRun( TrackerImportStrategy strategy )
@@ -167,8 +57,4 @@ public abstract class AbstractTrackerDtoValidationHook
         return false;
     }
 
-    private boolean didNotPassValidation( ValidationErrorReporter reporter, String uid )
-    {
-        return reporter.getReportList().stream().anyMatch( r -> r.getUid().equals( uid ) );
-    }
 }

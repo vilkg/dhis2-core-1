@@ -27,6 +27,7 @@
  */
 package org.hisp.dhis.tracker.validation;
 
+import org.hisp.dhis.tracker.TrackerImportStrategy;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 
 /**
@@ -35,4 +36,17 @@ import org.hisp.dhis.tracker.report.ValidationErrorReporter;
 public interface TrackerValidationHook
 {
     void validate( ValidationErrorReporter report, TrackerImportValidationContext bundle );
+    default boolean needsToRun( TrackerImportStrategy strategy )
+    {
+        return strategy != TrackerImportStrategy.DELETE;
+    }
+
+    /**
+     * Signal the implementing Validator hook that, upon validation error, the
+     * enrollment under validation must be removed from the payload.
+     *
+     */
+    default boolean removeOnError() {
+        return false;
+    }
 }

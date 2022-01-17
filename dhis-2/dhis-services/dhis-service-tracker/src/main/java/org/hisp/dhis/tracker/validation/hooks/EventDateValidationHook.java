@@ -48,6 +48,7 @@ import org.hisp.dhis.program.Program;
 import org.hisp.dhis.security.Authorities;
 import org.hisp.dhis.tracker.domain.Event;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.EventValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.hisp.dhis.user.User;
 import org.springframework.stereotype.Component;
@@ -57,7 +58,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EventDateValidationHook
-    extends AbstractTrackerDtoValidationHook
+    extends AbstractTrackerDtoValidationHook implements EventValidationHook
 {
     @Override
     public void validateEvent( ValidationErrorReporter reporter, Event event )

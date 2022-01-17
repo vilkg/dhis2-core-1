@@ -45,6 +45,7 @@ import org.hisp.dhis.program.Program;
 import org.hisp.dhis.tracker.domain.Event;
 import org.hisp.dhis.tracker.report.TrackerErrorCode;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.EventValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.hisp.dhis.util.DateUtils;
 import org.springframework.stereotype.Component;
@@ -55,7 +56,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class EventCategoryOptValidationHook
-    extends AbstractTrackerDtoValidationHook
+    extends AbstractTrackerDtoValidationHook implements EventValidationHook
 {
     private final I18nManager i18nManager;
 

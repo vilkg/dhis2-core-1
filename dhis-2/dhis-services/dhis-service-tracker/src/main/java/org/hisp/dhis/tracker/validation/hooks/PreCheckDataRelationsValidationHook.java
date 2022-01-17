@@ -73,6 +73,9 @@ import org.hisp.dhis.tracker.preheat.ReferenceTrackerEntity;
 import org.hisp.dhis.tracker.preheat.TrackerPreheat;
 import org.hisp.dhis.tracker.report.TrackerErrorCode;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.EnrollmentValidationHook;
+import org.hisp.dhis.tracker.validation.EventValidationHook;
+import org.hisp.dhis.tracker.validation.RelationshipValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.springframework.stereotype.Component;
 
@@ -82,16 +85,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PreCheckDataRelationsValidationHook
-    extends AbstractTrackerDtoValidationHook
+    extends AbstractTrackerDtoValidationHook implements EnrollmentValidationHook, EventValidationHook, RelationshipValidationHook
 {
     private final CategoryService categoryService;
-
-    @Override
-    public void validateTrackedEntity( ValidationErrorReporter reporter,
-        TrackedEntity trackedEntity )
-    {
-        // NOTHING TO DO HERE
-    }
 
     @Override
     public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )

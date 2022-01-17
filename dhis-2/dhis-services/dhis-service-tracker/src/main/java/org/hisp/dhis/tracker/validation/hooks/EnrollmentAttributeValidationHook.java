@@ -54,6 +54,8 @@ import org.hisp.dhis.tracker.domain.Enrollment;
 import org.hisp.dhis.tracker.domain.TrackedEntity;
 import org.hisp.dhis.tracker.preheat.ReferenceTrackerEntity;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.EnrollmentValidationHook;
+import org.hisp.dhis.tracker.validation.EventValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.hisp.dhis.tracker.validation.service.attribute.TrackedAttributeValidationService;
 import org.springframework.stereotype.Component;
@@ -65,7 +67,8 @@ import com.google.common.collect.Streams;
  * @author Morten Svanæs <msvanaes@dhis2.org>
  */
 @Component
-public class EnrollmentAttributeValidationHook extends AttributeValidationHook
+public class EnrollmentAttributeValidationHook
+    extends AttributeValidationHook implements EnrollmentValidationHook
 {
 
     public EnrollmentAttributeValidationHook( TrackedAttributeValidationService teAttrService )

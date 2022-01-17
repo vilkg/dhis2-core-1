@@ -27,7 +27,9 @@
  */
 package org.hisp.dhis.tracker.validation.hooks;
 
-import static org.hisp.dhis.tracker.report.TrackerErrorCode.*;
+import static org.hisp.dhis.tracker.report.TrackerErrorCode.E1126;
+import static org.hisp.dhis.tracker.report.TrackerErrorCode.E1127;
+import static org.hisp.dhis.tracker.report.TrackerErrorCode.E1128;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,9 +41,11 @@ import org.hisp.dhis.trackedentity.TrackedEntityInstance;
 import org.hisp.dhis.tracker.TrackerImportStrategy;
 import org.hisp.dhis.tracker.domain.Enrollment;
 import org.hisp.dhis.tracker.domain.Event;
-import org.hisp.dhis.tracker.domain.Relationship;
 import org.hisp.dhis.tracker.domain.TrackedEntity;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.EnrollmentValidationHook;
+import org.hisp.dhis.tracker.validation.EventValidationHook;
+import org.hisp.dhis.tracker.validation.TrackedEntityValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.springframework.stereotype.Component;
 
@@ -51,7 +55,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PreCheckUpdatableFieldsValidationHook
-    extends AbstractTrackerDtoValidationHook
+        extends AbstractTrackerDtoValidationHook implements TrackedEntityValidationHook, EnrollmentValidationHook, EventValidationHook
 {
     @Override
     public void validateTrackedEntity( ValidationErrorReporter reporter,
@@ -100,12 +104,6 @@ public class PreCheckUpdatableFieldsValidationHook
     public boolean needsToRun( TrackerImportStrategy strategy )
     {
         return strategy == TrackerImportStrategy.UPDATE;
-    }
-
-    @Override
-    public void validateRelationship( ValidationErrorReporter reporter, Relationship relationship )
-    {
-        // Nothing to do
     }
 
     @Override

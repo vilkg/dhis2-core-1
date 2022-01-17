@@ -42,6 +42,7 @@ import java.util.Objects;
 import org.hisp.dhis.program.Program;
 import org.hisp.dhis.tracker.domain.Enrollment;
 import org.hisp.dhis.tracker.report.ValidationErrorReporter;
+import org.hisp.dhis.tracker.validation.EnrollmentValidationHook;
 import org.hisp.dhis.tracker.validation.TrackerImportValidationContext;
 import org.springframework.stereotype.Component;
 
@@ -50,7 +51,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EnrollmentDateValidationHook
-    extends AbstractTrackerDtoValidationHook
+    extends AbstractTrackerDtoValidationHook implements EnrollmentValidationHook
 {
     @Override
     public void validateEnrollment( ValidationErrorReporter reporter, Enrollment enrollment )
