@@ -27,74 +27,21 @@
  */
 package org.hisp.dhis.common;
 
-import java.util.Date;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.List;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.hisp.dhis.analytics.SortOrder;
-import org.hisp.dhis.program.ProgramStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * @author Jan Bernitt
- */
-@Data
-@NoArgsConstructor
-public class EnrollmentAnalyticsQueryCriteria
+@Getter
+@Setter
+public class PerformanceMetrics implements Serializable
 {
-    private Date startDate;
+    @JsonProperty
+    private double totalTimeInMillis;
 
-    private Date endDate;
-
-    private String timeField;
-
-    private Set<String> dimension;
-
-    private Set<String> filter;
-
-    /**
-     * This parameter selects the headers to be returned as part of the
-     * response. The implementation for this Set will be LinkedHashSet as the
-     * ordering is important.
-     */
-    private Set<String> headers;
-
-    private OrganisationUnitSelectionMode ouMode;
-
-    private Set<String> asc;
-
-    private Set<String> desc;
-
-    private boolean skipMeta;
-
-    private boolean skipData;
-
-    private boolean completedOnly;
-
-    private boolean hierarchyMeta;
-
-    private boolean coordinatesOnly;
-
-    private boolean includeMetadataDetails;
-
-    private IdScheme dataIdScheme;
-
-    private ProgramStatus programStatus;
-
-    private Integer page;
-
-    private Integer pageSize;
-
-    private boolean paging;
-
-    private DisplayProperty displayProperty;
-
-    private Date relativePeriodDate;
-
-    private String userOrgUnit;
-
-    private String coordinateField;
-
-    private SortOrder sortOrder;
+    @JsonProperty
+    private List<ExecutionPlan> executionPlans;
 }

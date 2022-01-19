@@ -25,76 +25,45 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.common;
+package org.hisp.dhis.programrule.action.validation;
 
-import java.util.Date;
-import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import org.hisp.dhis.analytics.SortOrder;
-import org.hisp.dhis.program.ProgramStatus;
+import org.hisp.dhis.feedback.ErrorCode;
+import org.hisp.dhis.feedback.ErrorReport;
+import org.hisp.dhis.programrule.ProgramRule;
+import org.hisp.dhis.programrule.ProgramRuleAction;
+import org.hisp.dhis.programrule.ProgramRuleActionValidationResult;
+import org.springframework.stereotype.Component;
 
 /**
- * @author Jan Bernitt
+ * @author Zubair Asghar
  */
-@Data
-@NoArgsConstructor
-public class EnrollmentAnalyticsQueryCriteria
+
+@Slf4j
+@Component
+public class AssignProgramRuleActionValidator implements ProgramRuleActionValidator
 {
-    private Date startDate;
+    @Override
+    public ProgramRuleActionValidationResult validate( ProgramRuleAction programRuleAction,
+        ProgramRuleActionValidationContext validationContext )
+    {
+        ProgramRule rule = validationContext.getProgramRule();
 
-    private Date endDate;
+        if ( !programRuleAction.hasDataElement() && !programRuleAction.hasTrackedEntityAttribute()
+            && !programRuleAction.hasContent() )
+        {
+            log.debug( String.format(
+                "DataElement or TrackedEntityAttribute or ProgramRuleVariable cannot be null for program rule: %s ",
+                rule.getName() ) );
 
-    private String timeField;
+            return ProgramRuleActionValidationResult.builder()
+                .valid( false )
+                .errorReport( new ErrorReport( ProgramRuleAction.class, ErrorCode.E4050,
+                    rule.getName() ) )
+                .build();
+        }
 
-    private Set<String> dimension;
-
-    private Set<String> filter;
-
-    /**
-     * This parameter selects the headers to be returned as part of the
-     * response. The implementation for this Set will be LinkedHashSet as the
-     * ordering is important.
-     */
-    private Set<String> headers;
-
-    private OrganisationUnitSelectionMode ouMode;
-
-    private Set<String> asc;
-
-    private Set<String> desc;
-
-    private boolean skipMeta;
-
-    private boolean skipData;
-
-    private boolean completedOnly;
-
-    private boolean hierarchyMeta;
-
-    private boolean coordinatesOnly;
-
-    private boolean includeMetadataDetails;
-
-    private IdScheme dataIdScheme;
-
-    private ProgramStatus programStatus;
-
-    private Integer page;
-
-    private Integer pageSize;
-
-    private boolean paging;
-
-    private DisplayProperty displayProperty;
-
-    private Date relativePeriodDate;
-
-    private String userOrgUnit;
-
-    private String coordinateField;
-
-    private SortOrder sortOrder;
+        return ProgramRuleActionValidationResult.builder().valid( true ).build();
+    }
 }

@@ -25,76 +25,17 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.hisp.dhis.common;
+package org.hisp.dhis.analytics.analyze;
 
-import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.hisp.dhis.common.ExecutionPlan;
 
-import org.hisp.dhis.analytics.SortOrder;
-import org.hisp.dhis.program.ProgramStatus;
-
-/**
- * @author Jan Bernitt
- */
-@Data
-@NoArgsConstructor
-public class EnrollmentAnalyticsQueryCriteria
+public interface ExecutionPlanStore
 {
-    private Date startDate;
+    void addExecutionPlan( String params, String sql );
 
-    private Date endDate;
+    List<ExecutionPlan> getExecutionPlans( String key );
 
-    private String timeField;
-
-    private Set<String> dimension;
-
-    private Set<String> filter;
-
-    /**
-     * This parameter selects the headers to be returned as part of the
-     * response. The implementation for this Set will be LinkedHashSet as the
-     * ordering is important.
-     */
-    private Set<String> headers;
-
-    private OrganisationUnitSelectionMode ouMode;
-
-    private Set<String> asc;
-
-    private Set<String> desc;
-
-    private boolean skipMeta;
-
-    private boolean skipData;
-
-    private boolean completedOnly;
-
-    private boolean hierarchyMeta;
-
-    private boolean coordinatesOnly;
-
-    private boolean includeMetadataDetails;
-
-    private IdScheme dataIdScheme;
-
-    private ProgramStatus programStatus;
-
-    private Integer page;
-
-    private Integer pageSize;
-
-    private boolean paging;
-
-    private DisplayProperty displayProperty;
-
-    private Date relativePeriodDate;
-
-    private String userOrgUnit;
-
-    private String coordinateField;
-
-    private SortOrder sortOrder;
+    void removeExecutionPlans( String key );
 }
