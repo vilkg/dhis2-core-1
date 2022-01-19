@@ -165,10 +165,12 @@ class ProgramRuleEngineDescriptionTest extends DhisSpringTest
         programRuleVariableNumericAtt = createProgramRuleVariableWithTEA( 'S', program, numericAttribute );
         programRuleVariableTextDE = createProgramRuleVariableWithDataElement( 'T', program, textDataElement );
         programRuleVariableNumericDE = createProgramRuleVariableWithDataElement( 'U', program, numericDataElement );
-        programRuleVariableCalculatedValue1 = createProgramRuleVariableWithSourceType( 'X', program, ProgramRuleVariableSourceType.CALCULATED_VALUE, ValueType.NUMBER );
-        programRuleVariableCalculatedValue2 = createProgramRuleVariableWithSourceType( 'Y', program, ProgramRuleVariableSourceType.CALCULATED_VALUE, ValueType.NUMBER );
-        programRuleVariableCalculatedValue1.setName("prv1");
-        programRuleVariableCalculatedValue2.setName("prv2");
+        programRuleVariableCalculatedValue1 = createProgramRuleVariableWithSourceType( 'X', program,
+            ProgramRuleVariableSourceType.CALCULATED_VALUE, ValueType.NUMBER );
+        programRuleVariableCalculatedValue2 = createProgramRuleVariableWithSourceType( 'Y', program,
+            ProgramRuleVariableSourceType.CALCULATED_VALUE, ValueType.NUMBER );
+        programRuleVariableCalculatedValue1.setName( "prv1" );
+        programRuleVariableCalculatedValue2.setName( "prv2" );
 
         programRuleVariableTextAtt.setName( "Program_Rule_Variable_Text_Attr" );
         programRuleVariableNumericAtt.setName( "Program_Rule_Variable_Numeric_Attr" );
