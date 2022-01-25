@@ -55,14 +55,16 @@ public class PdfDataEntryFormGenerator
     public ByteArrayOutputStream generateDataEntry( DataSet object, PdfDataEntrySettings settings )
     {
         Document document = new Document();
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
         try
         {
             document.open();
+
+            PdfWriter writer = PdfWriter.getInstance( document, baos );
+            System.out.println( "document.isOpen() = " + document.isOpen() );
+
             PdfDocument pdfDocument = new DataSetPdfDocument( document, settings );
-            pdfDocument.write( PdfWriter.getInstance( document, baos ), object );
+            pdfDocument.write( writer, object );
         }
         catch ( Exception ex )
         {
@@ -70,7 +72,10 @@ public class PdfDataEntryFormGenerator
         }
         finally
         {
-            document.close();
+            if ( document.isOpen() )
+            {
+                // document.close();
+            }
         }
 
         return baos;

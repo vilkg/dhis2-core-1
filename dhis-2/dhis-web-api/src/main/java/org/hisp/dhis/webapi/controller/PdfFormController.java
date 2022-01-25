@@ -45,10 +45,8 @@ import org.hisp.dhis.dxf2.common.ImportOptions;
 import org.hisp.dhis.dxf2.datavalueset.DataValueSetService;
 import org.hisp.dhis.dxf2.importsummary.ImportSummary;
 import org.hisp.dhis.dxf2.pdfform.PdfDataEntryFormGenerator;
-import org.hisp.dhis.dxf2.pdfform.PdfDataEntryFormService;
 import org.hisp.dhis.dxf2.pdfform.PdfDataEntrySettings;
 import org.hisp.dhis.dxf2.webmessage.WebMessage;
-import org.hisp.dhis.i18n.I18nFormat;
 import org.hisp.dhis.i18n.I18nManager;
 import org.hisp.dhis.scheduling.JobConfiguration;
 import org.hisp.dhis.scheduling.JobType;
@@ -94,16 +92,10 @@ public class PdfFormController
     private I18nManager i18nManager;
 
     @Autowired
-    private PdfDataEntryFormService pdfDataEntryFormService;
-
-    @Autowired
     private PdfDataEntryFormGenerator pdfGenerator;
 
     @Autowired
     private ContextUtils contextUtils;
-
-    @Autowired
-    private I18nFormat i18nFormat;
 
     // --------------------------------------------------------------------------
     // DataSet
@@ -121,7 +113,7 @@ public class PdfFormController
         }
 
         PdfDataEntrySettings settings = new PdfDataEntrySettings();
-        settings.setI18nFormat( i18nFormat );
+        settings.setI18nFormat( i18nManager.getI18nFormat() );
 
         settings.setServerName( request.getServerName() );
 
