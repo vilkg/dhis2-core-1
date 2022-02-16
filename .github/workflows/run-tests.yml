@@ -30,7 +30,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: $(find "$(pwd)" -path '*jacoco.xml' | sed 's/.*/&/' | tr '\n' ',')
-          flags: unittests
+          flags: unittest
 
   integration-test:
     runs-on: ubuntu-latest
