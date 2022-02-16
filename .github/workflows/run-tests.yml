@@ -24,6 +24,13 @@ jobs:
 
       - name: Test dhis-web
         run: mvn clean install --threads 1C --batch-mode --no-transfer-progress --update-snapshots -f ./dhis-2/dhis-web/pom.xml
+        
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v2.0.2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: $(find "$(pwd)" -path '*jacoco.xml' | sed 's/.*/&/' | tr '\n' ',')
+          flags: unittests
 
   integration-test:
     runs-on: ubuntu-latest
